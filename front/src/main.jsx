@@ -7,12 +7,13 @@ import CategoriesCarousel from '@/components/CategoriesCarousel';
 import TestimonialsCarousel from '@/components/TestimonialsCarousel';
 import Footer from '@/components/Footer';
 import './index.css';
+import '@/assets/styles/global.css';
 
 const Main = () => {
   return (
     <div>
       <Header />
-      <main className="">
+      <main className='bg-white'>
       <HeroSection />
       <CategoriesCarousel />
       <TestimonialsCarousel />

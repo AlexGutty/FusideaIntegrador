@@ -4,7 +4,7 @@ const Header = () => {
   const { isMenuOpen, toggleMenu } = useMenu();
 
   return (
-    <header className="sticky top-0 bg-white shadow">
+    <header className="sticky top-0 bg-white shadow z-50">
       <div className="flex flex-col md:flex-row items-center justify-between p-4 mx-auto max-w-7xl">
         <a href="../html/index.php">
           <img src="../imgs/logo1.jpg" alt="Logo" className="h-12 w-auto rounded mb-4 md:mb-0" />

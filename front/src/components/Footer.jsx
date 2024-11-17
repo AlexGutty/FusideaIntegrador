@@ -2,7 +2,7 @@ import React from 'react';
 
 const Footer = () => {
   return (
-    <footer className="bg-[#4c9141] text-white py-8">
+    <footer className="bg-[#4c9141] text-white">
       <div className="flex flex-col items-center text-center">
         <a href="/">
           <img src="../imgs/logo1.jpg" alt="Logo de Fusidea" className="mx-auto mb-4 h-12" />
