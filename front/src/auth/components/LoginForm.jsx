@@ -1,44 +1,10 @@
-import React, { useState } from 'react';
+// LoginForm.jsx
+import React from 'react';
+import useLoginForm from '@/src/auth/hooks/useLoginForm';
 
 const LoginForm = () => {
-  // Estado para almacenar los datos del formulario
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-  });
-
-  // Manejar el cambio en los inputs
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  // Manejar el envío del formulario
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await fetch('http://localhost:3000/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      const result = await response.json();
-      if (response.ok) {
-        alert('Login exitoso');
-      } else {
-        alert(result.message || 'Error al iniciar sesión');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      alert('Error al conectar con el servidor');
-    }
-  };
+  // Usar el hook personalizado
+  const { formData, handleChange, handleSubmit } = useLoginForm();
 
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
@@ -55,6 +21,7 @@ const LoginForm = () => {
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
         <form className="space-y-6" onSubmit={handleSubmit}>
+          {/* Input para el correo electrónico */}
           <div>
             <label
               htmlFor="email"
@@ -76,6 +43,7 @@ const LoginForm = () => {
             </div>
           </div>
 
+          {/* Input para la contraseña */}
           <div>
             <div className="flex items-center justify-between">
               <label
@@ -107,6 +75,7 @@ const LoginForm = () => {
             </div>
           </div>
 
+          {/* Botón para enviar el formulario */}
           <div>
             <button
               type="submit"
@@ -117,6 +86,7 @@ const LoginForm = () => {
           </div>
         </form>
 
+        {/* Enlace para crear una nueva cuenta */}
         <p className="mt-10 text-center text-sm text-gray-500">
           ¿No eres miembro?{' '}
           <a

@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import UserProfilePage from '@/pages/UserProfilePage';
+import Header from '@/presentation/components/Header';
+import Footer from '@/presentation/components/Footer';
+import UserProfile from '@/presentation/pages/UserProfile';
 import './index.css';
 import '@/assets/styles/global.css';
 
@@ -11,7 +11,7 @@ const Main = () => {
     <div>
       <Header />
       <main className="bg-gray-50">
-        <UserProfilePage />
+        <UserProfile />
       </main>
       <Footer />
     </div>

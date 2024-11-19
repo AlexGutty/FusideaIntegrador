@@ -1,4 +1,6 @@
 import React from 'react';
+
+import { BrowserRouter as Router } from 'react-router-dom';
 import ReactDOM from 'react-dom/client';
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
@@ -12,11 +14,11 @@ const Main = () => {
   return (
     <div>
       <Header />
-      <main className='bg-white'>
-      <HeroSection />
-      <CategoriesCarousel />
-      <TestimonialsCarousel />
-    </main>
+      <main className="bg-white">
+        <HeroSection />
+        <CategoriesCarousel />
+        <TestimonialsCarousel />
+      </main>
       <Footer />
     </div>
   );
@@ -24,6 +26,8 @@ const Main = () => {
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <Main />
+    <Router>
+      <Main />
+    </Router>
   </React.StrictMode>
 );

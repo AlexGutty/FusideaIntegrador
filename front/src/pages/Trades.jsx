@@ -5,7 +5,7 @@ import MyTrades from '@/components/MyTrades';
 import Footer from '@/components/Footer';
 import './index.css';
 import '@/assets/styles/global.css';
-import MyTrades from '../components/MyTrades';
+import MyTrades from '@/components/MyTrades';
 
 const Main = () => {
   return (

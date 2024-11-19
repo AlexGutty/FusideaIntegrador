@@ -1,24 +1,36 @@
-
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from '@/components/Header'; 
-import Home from '@/index';
-import Colaboradores from '@/pages/Colaboradores';
-import Trades from '@/pages/Trades';
-import Nosotros from '@/pages/Nosotros';
-import Login from '@/pages/Login';
-import Register from '@/pages/Register';
+
+// Páginas del módulo de autenticación
+import Login from '@/auth/pages/Login'; 
+import PasswordRecovery from '@/auth/pages/PasswordRecovery';
+import PasswordReset from '@/auth/pages/PasswordReset';
+import Register from '@/auth/pages/Register';
+
+// Páginas principales de la aplicación
+import HomePage from '@/presentation/pages/HomePage'; 
+import UserProfilePage from '@/presentation/pages/UserProfilePage'; 
+
+// Páginas adicionales en tu proyecto
+import AboutUs from '@/pages/AboutUs'; 
+import Trades from '@/pages/Trades'; 
 
 const AppRouter = () => {
   return (
     <Router>
-      <Header /> 
+      <Header /> {/* Componente de cabecera */}
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/colaboradores" element={<Colaboradores />} />
+        {/* Rutas principales */}
+        <Route path="/" element={<HomePage />} />
+        <Route path="/perfil" element={<UserProfilePage />} />
+        <Route path="/about-us" element={<AboutUs />} />
         <Route path="/trades" element={<Trades />} />
-        <Route path="/nosotros" element={<Nosotros />} />
+
+        {/* Rutas de autenticación */}
         <Route path="/login" element={<Login />} />
+        <Route path="/recuperar-contraseña" element={<PasswordRecovery />} />
+        <Route path="/restablecer-contraseña" element={<PasswordReset />} />
         <Route path="/register" element={<Register />} />
       </Routes>
     </Router>
