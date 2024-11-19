@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import Header from '@/components/Header';
 import MyTrades from '@/components/MyTrades'; 
 import Footer from '@/components/Footer';
-import './index.css';
+import '@/index.css';
 import '@/assets/styles/global.css';
 import MyTrades from '@/components/MyTrades';
 

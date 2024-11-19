@@ -1,17 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import Header from '@/components/Header';
-import AboutUs from '@/components/AboutUs'; 
+import MyTrades from '@/components/MyTrades'; 
 import Footer from '@/components/Footer';
-import './index.css';
+import '@/index.css';
 import '@/assets/styles/global.css';
+import MyTrades from '@/components/MyTrades';
 
 const Main = () => {
   return (
     <div>
       <Header />
       <main className='bg-white'>
-        <AboutUs /> 
+        <MyTrades /> 
       </main>
       <Footer />
     </div>

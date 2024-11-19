@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import Header from '@/presentation/components/Header';
-import Footer from '@/presentation/components/Footer';
-import UserProfile from '@/presentation/pages/UserProfile';
-import './index.css';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import UserProfile from '@/presentation/components/UserProfile';
+import '@/index.css';
 import '@/assets/styles/global.css';
 
 const Main = () => {
