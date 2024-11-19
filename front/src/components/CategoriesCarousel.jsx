@@ -1,7 +1,7 @@
 // src/components/CategoriesCarousel.jsx
 import React from 'react';
-import useCategories from '@/hooks/useCategories';
-import useInView from '@/hooks/useInView';
+import useCategories from '../hooks/useCategories';
+import useInView from '../hooks/useInView';
 
 const CategoriesCarousel = () => {
   const categories = useCategories();

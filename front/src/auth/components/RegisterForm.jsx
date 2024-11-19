@@ -1,5 +1,5 @@
 import React from 'react';
-import useRegister from '@/src/auth/hooks/useRegister';
+import useRegister from '../hooks/useRegister';
 
 const RegisterForm = () => {
   const {

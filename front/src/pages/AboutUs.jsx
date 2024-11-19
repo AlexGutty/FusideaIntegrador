@@ -1,13 +1,11 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
-import Header from '@/components/Header';
-import MyTrades from '@/components/MyTrades'; 
-import Footer from '@/components/Footer';
-import '@/index.css';
-import '@/assets/styles/global.css';
-import MyTrades from '@/components/MyTrades';
+import Header from '../components/Header';
+import MyTrades from '../components/MyTrades'; 
+import Footer from '../components/Footer';
+import '../index.css';
+import '../assets/styles/global.css';
 
-const Main = () => {
+const AboutUs = () => {
   return (
     <div>
       <Header />
@@ -19,8 +17,5 @@ const Main = () => {
   );
 };
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <Main />
-  </React.StrictMode>
-);
+
+export default AboutUs;

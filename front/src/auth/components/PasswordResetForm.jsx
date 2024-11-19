@@ -1,5 +1,5 @@
 import React from 'react';
-import usePasswordReset from '@/src/auth/hooks/usePasswordReset';
+import usePasswordReset from '../hooks/usePasswordReset';
 
 const PasswordResetForm = () => {
   const {

@@ -1,5 +1,5 @@
 import React from 'react';
-import useHeroSection from '@/hooks/useHeroSection'; 
+import useHeroSection from '../hooks/useHeroSection'; 
 
 const HeroSection = () => {
   const { title, description, buttonStartText, buttonLearnMoreText, logoImg, mainImage } = useHeroSection();

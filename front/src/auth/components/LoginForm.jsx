@@ -1,6 +1,6 @@
 // LoginForm.jsx
 import React from 'react';
-import useLoginForm from '@/src/auth/hooks/useLoginForm';
+import useLoginForm from '../hooks/useLoginForm';
 
 const LoginForm = () => {
   // Usar el hook personalizado

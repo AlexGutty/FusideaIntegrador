@@ -1,7 +1,7 @@
 // src/components/TestimonialsCarousel.jsx
 import React from 'react';
-import useTestimonials from '@/hooks/useTestimonials';
-import useInView from '@/hooks/useInView';
+import useTestimonials from '../hooks/useTestimonials';
+import useInView from '../hooks/useInView';
 
 const TestimonialsCarousel = () => {
   const testimonials = useTestimonials();

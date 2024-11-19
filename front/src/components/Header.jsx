@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom'; 
-import useMenu from '@/hooks/useMenu';
-import useAuthState from '@/hooks/useAuthState';
+import useMenu from '../hooks/useMenu';
+import useAuthState from '../hooks/useAuthState';
 
 const Header = () => {
   const { isMenuOpen, toggleMenu } = useMenu();

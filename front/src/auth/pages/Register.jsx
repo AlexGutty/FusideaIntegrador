@@ -1,9 +1,8 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
-import Header from '@/components/Header'; 
-import RegisterForm from '@/auth/components/RegisterForm'; 
-import '@/index.css';
-import '@/assets/styles/global.css';
+import Header from '../../components/Header'; 
+import RegisterForm from '../components/RegisterForm'; 
+import '../../index.css';
+import '../../assets/styles/global.css';
 
 const Register = () => {
   return (
@@ -17,8 +16,4 @@ const Register = () => {
   );
 };
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <Register />
-  </React.StrictMode>
-);
+export default Register;

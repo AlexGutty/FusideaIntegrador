@@ -1,5 +1,5 @@
 import React from 'react';
-import usePasswordRecovery from '@/src/auth/hooks/usePasswordRecovery';
+import usePasswordRecovery from '../hooks/usePasswordRecovery';
 
 const PasswordRecoveryForm = () => {
   const {
