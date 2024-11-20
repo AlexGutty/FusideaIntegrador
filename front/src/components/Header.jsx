@@ -1,11 +1,18 @@
-import React from 'react';
-import { Link } from 'react-router-dom'; 
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import useMenu from '../hooks/useMenu';
 import useAuthState from '../hooks/useAuthState';
 
 const Header = () => {
   const { isMenuOpen, toggleMenu } = useMenu();
   const { isAuthenticated, user, logout } = useAuthState();
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+    // Aquí puedes agregar lógica para filtrar resultados o realizar una petición al servidor
+    console.log('Buscando:', searchTerm);
+  };
 
   return (
     <header className="sticky top-0 bg-white shadow z-50">
@@ -15,69 +22,50 @@ const Header = () => {
           <img src="../imgs/logo1.jpg" alt="Logo" className="h-12 w-auto rounded mb-4 md:mb-0" />
         </Link>
 
-        {/* Menu Button */}
-        <button
-          id="menu-btn"
-          className="block md:hidden focus:outline-none"
-          onClick={toggleMenu}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" />
-          </svg>
-        </button>
+        {/* Barra de búsqueda */}
+        <div className="flex items-center w-full md:w-auto md:ml-4">
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={handleSearch}
+            placeholder="Buscar..."
+            className="border rounded px-4 py-2 w-full md:w-64"
+          />
+        </div>
 
-        {/* Navigation Links */}
+        {/* Menú y autenticación */}
         <nav
           id="menu"
           className={`md:flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4 mb-4 md:mb-0 ${isMenuOpen ? 'block' : 'hidden'}`}
         >
-          <Link
-            to="/"
-            className="smky-btn3 relative hover:text-[#FFCA28] py-2 px-6 after:absolute after:h-1 after:hover:h-[200%] transition-all duration-500 after:transition-all after:duration-500 overflow-hidden z-20 after:z-[-20] after:bg-[#2170C0] after:rounded-t-full after:w-full after:bottom-0 after:left-0 text-gray-600"
-          >
+          <Link to="/" className="text-gray-600 hover:text-blue-500">
             Home
           </Link>
           {isAuthenticated ? (
             <>
-              <Link
-                to="/connect"
-                className="smky-btn3 relative hover:text-[#FFCA28] py-2 px-6 after:absolute after:h-1 after:hover:h-[200%] transition-all duration-500 after:transition-all after:duration-500 overflow-hidden z-20 after:z-[-20] after:bg-[#2170C0] after:rounded-t-full after:w-full after:bottom-0 after:left-0 text-gray-600"
-              >
+              <Link to="/connect" className="text-gray-600 hover:text-blue-500">
                 Conecta
               </Link>
-              <Link
-                to="/trades"
-                className="smky-btn3 relative hover:text-[#FFCA28] py-2 px-6 after:absolute after:h-1 after:hover:h-[200%] transition-all duration-500 after:transition-all after:duration-500 overflow-hidden z-20 after:z-[-20] after:bg-[#2170C0] after:rounded-t-full after:w-full after:bottom-0 after:left-0 text-gray-600"
-              >
+              <Link to="/trades" className="text-gray-600 hover:text-blue-500">
                 Trades
               </Link>
-              <Link
-                to="/about-us"
-                className="smky-btn3 relative hover:text-[#FFCA28] py-2 px-6 after:absolute after:h-1 after:hover:h-[200%] transition-all duration-500 after:transition-all after:duration-500 overflow-hidden z-20 after:z-[-20] after:bg-[#2170C0] after:rounded-t-full after:w-full after:bottom-0 after:left-0 text-gray-600"
-              >
-                About Us
+              <Link to="/about-us" className="text-gray-600 hover:text-blue-500">
+                Nosotros
               </Link>
             </>
           ) : (
             <>
-
-              <Link
-                to="/trades"
-                className="smky-btn3 relative hover:text-[#FFCA28] py-2 px-6 after:absolute after:h-1 after:hover:h-[200%] transition-all duration-500 after:transition-all after:duration-500 overflow-hidden z-20 after:z-[-20] after:bg-[#2170C0] after:rounded-t-full after:w-full after:bottom-0 after:left-0 text-gray-600"
-              >
+              <Link to="/trades" className="text-gray-600 hover:text-blue-500">
                 Trades
               </Link>
-              <Link
-                to="/about-us"
-                className="smky-btn3 relative hover:text-[#FFCA28] py-2 px-6 after:absolute after:h-1 after:hover:h-[200%] transition-all duration-500 after:transition-all after:duration-500 overflow-hidden z-20 after:z-[-20] after:bg-[#2170C0] after:rounded-t-full after:w-full after:bottom-0 after:left-0 text-gray-600"
-              >
+              <Link to="/about-us" className="text-gray-600 hover:text-blue-500">
                 Nosotros
               </Link>
             </>
           )}
         </nav>
 
-        {/* Authentication or User Menu */}
+        {/* Usuario o autenticación */}
         {isAuthenticated ? (
           <div className="relative group">
             <div className="flex items-center space-x-2 cursor-pointer">
@@ -91,10 +79,7 @@ const Header = () => {
             <div className="absolute right-0 mt-2 bg-white shadow-lg rounded-md w-48 hidden group-hover:block">
               <ul className="py-2">
                 <li>
-                  <Link
-                    to="/perfil"
-                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                  >
+                  <Link to="/perfil" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
                     Ir a mi perfil
                   </Link>
                 </li>
@@ -110,16 +95,12 @@ const Header = () => {
             </div>
           </div>
         ) : (
-          <div id="auth-buttons" className="hidden md:flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4">
-            <Link to="/login">
-              <button className="smky-btn3 relative hover:text-[#13437F] py-2 px-6 after:absolute after:h-1 after:hover:h-[200%] transition-all duration-500 after:transition-all after:duration-500 overflow-hidden z-20 after:z-[-20] after:bg-[#4CAF50] after:rounded-t-full after:w-full after:bottom-0 after:left-0 text-gray-600">
-                Iniciar Sesión
-              </button>
+          <div className="flex space-x-4">
+            <Link to="/login" className="text-gray-600 hover:text-blue-500">
+              Iniciar Sesión
             </Link>
-            <Link to="/register">
-              <button className="smky-btn3 relative hover:text-[#13437F] py-2 px-6 after:absolute after:h-1 after:hover:h-[200%] transition-all duration-500 after:transition-all after:duration-500 overflow-hidden z-20 after:z-[-20] after:bg-[#4CAF50] after:rounded-t-full after:w-full after:bottom-0 after:left-0 text-gray-600">
-                Registrarse
-              </button>
+            <Link to="/register" className="text-gray-600 hover:text-blue-500">
+              Registrarse
             </Link>
           </div>
         )}
