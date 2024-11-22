@@ -8,6 +8,7 @@ import Trades from '../pages/Trades';
 import Login from '../auth/pages/Login';
 import Register from '../auth/pages/Register';
 import PrivateRoute from '../routers/PrivateRoute';
+import UserProfileProfile from '../presentation/pages/UserProfileProfile';
 
 const AppRouter = () => {
   return (
@@ -20,6 +21,7 @@ const AppRouter = () => {
           <Route path="about-us" element={<AboutUs />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
+          <Route path="my-profile" element={<UserProfileProfile />} />
 
           {/* Protected Routes */}
           <Route element={<PrivateRoute />}>
@@ -32,3 +34,4 @@ const AppRouter = () => {
 };
 
 export default AppRouter;
+
