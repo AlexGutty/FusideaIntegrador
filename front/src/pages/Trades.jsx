@@ -1,18 +1,14 @@
 import React from 'react';
-import Header from '../components/Header';
 import MyTrades from '../components/MyTrades'; 
-import Footer from '../components/Footer';
 import '../index.css';
 import '../assets/styles/global.css';
 
 const Trades = () => {
   return (
     <div>
-      <Header />
-      <main className='bg-white'>
+      <main className="flex-1 max-w-5xl mx-auto mt-10 p-6 bg-white shadow-md rounded-lg">
         <MyTrades /> 
       </main>
-      <Footer />
     </div>
   );
 };

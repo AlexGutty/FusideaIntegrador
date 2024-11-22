@@ -1,7 +1,7 @@
 import React from 'react';
-import ProfileBanner from '.ProfileBanner';
-import ProfileInfo from '.ProfileInfo';
-import SectionItem from '.SectionItem';
+import ProfileBanner from './ProfileBanner';
+import ProfileInfo from './ProfileInfo';
+import SectionItem from './SectionItem';
 
 const UserProfile = ({ profileData }) => (
   <div className="max-w-4xl mx-auto mt-10 bg-white rounded-lg shadow-lg overflow-hidden">

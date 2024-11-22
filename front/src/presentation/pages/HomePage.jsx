@@ -1,15 +1,10 @@
 import React from 'react';
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
-import Banner from '../../components/Banner';
-import UserCard from '../../components/UserCard';
-import ChatBubble from '../../components/ChatBubble';
+import Banner from '../components/Banner';
+import UserCard from '../components/UserCard';
+import ChatBubble from '../components/ChatBubble';
 import '../../index.css';
-import '../../styles.css';
-import '../../App.css';
 import '../../assets/styles/global.css';
 
-// Datos de ejemplo - Reemplazar con datos reales del backend
 const mockUsers = [
   {
     id: 1,
@@ -40,8 +35,6 @@ const mockUsers = [
 const HomePage = () => {
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
-      
       <main className="flex-grow bg-gray-50">
         <Banner />
         
@@ -60,8 +53,8 @@ const HomePage = () => {
 
         <ChatBubble />
       </main>
-
-      <Footer />
     </div>
   );
 };
+
+export default HomePage;
