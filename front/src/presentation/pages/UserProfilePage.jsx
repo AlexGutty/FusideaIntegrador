@@ -1,9 +1,7 @@
 import React, { useContext, useEffect } from 'react';
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
 import UserProfile from '../components/UserProfile';
 import { ProjectContext } from '../../contexts/ProjectContext';
-import { NotificationContext } from '../../contexts/NotificationContext'; // Para notificaciones
+import { NotificationContext } from '../../contexts/NotificationContext';
 import '../../index.css';
 import '../../assets/styles/global.css';
 
@@ -30,9 +28,8 @@ const UserProfilePage = () => {
   };
 
   return (
-    <div>
-      <Header />
-      <main className="bg-gray-50">
+    <div className="min-h-screen flex flex-col">
+      <main className="flex-grow bg-gray-50">
         <UserProfile />
         <section className="p-4">
           <h2 className="text-xl font-bold mb-4">Portafolio</h2>
@@ -58,7 +55,6 @@ const UserProfilePage = () => {
           </button>
         </section>
       </main>
-      <Footer />
     </div>
   );
 };
