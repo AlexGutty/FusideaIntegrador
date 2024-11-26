@@ -10,6 +10,7 @@ import Register from '../auth/pages/Register';
 import PrivateRoute from '../routers/PrivateRoute';
 import UserProfileProfile from '../presentation/pages/UserProfileProfile';
 import FriendshipManager from '../presentation/pages/FriendshipManager';
+import UserDirectory from '../presentation/pages/userDirectory';
 const AppRouter = () => {
   return (
     <BrowserRouter>
@@ -23,6 +24,7 @@ const AppRouter = () => {
           <Route path="register" element={<Register />} />
           <Route path="my-profile" element={<UserProfileProfile />} />
           <Route path="friendship-manager" element={<FriendshipManager />} />
+          <Route path="user-directory" element={<UserDirectory />} />
           {/* Protected Routes */}
           <Route element={<PrivateRoute />}>
             <Route path="perfil" element={<UserProfilePage />} />
