@@ -1,18 +1,11 @@
 import { useState, useEffect } from 'react';
 
-// Simulamos una función de autenticación
-const fetchUserData = () => {
-  // Aquí puedes reemplazar con una llamada real a tu API o almacenamiento local
-  const user = JSON.parse(localStorage.getItem('user'));
-  return user;
-};
-
 const useAuthState = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const storedUser = fetchUserData();
+    const storedUser = JSON.parse(localStorage.getItem('user'));
 
     if (storedUser) {
       setIsAuthenticated(true);
@@ -35,12 +28,21 @@ const useAuthState = () => {
     setIsAuthenticated(false);
   };
 
+  const updateUserAvatar = (newAvatarUrl) => {
+    const updatedUser = { ...user, avatar: newAvatarUrl };
+    localStorage.setItem('user', JSON.stringify(updatedUser));
+    setUser(updatedUser);
+  };
+
   return {
     isAuthenticated,
     user,
     login,
-    logout
+    logout,
+    updateUserAvatar
   };
 };
 
 export default useAuthState;
+
+

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useRef, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import useMenu from '../hooks/useMenu';
 import useAuthState from '../hooks/useAuthState';
 
@@ -7,99 +7,156 @@ const Header = () => {
   const { isMenuOpen, toggleMenu } = useMenu();
   const { isAuthenticated, user, logout } = useAuthState();
   const [searchTerm, setSearchTerm] = useState('');
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const profileMenuRef = useRef(null);
+  const location = useLocation();
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
-    // Aquí puedes agregar lógica para filtrar resultados o realizar una petición al servidor
-    console.log('Buscando:', searchTerm);
+    console.log('Buscando:', e.target.value);
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (profileMenuRef.current && !profileMenuRef.current.contains(event.target)) {
+        setIsProfileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    setIsProfileMenuOpen(false);
+  }, [location]);
+
+  const isActivePath = (path) => {
+    return location.pathname === path;
+  };
+
+  const navLinkClasses = (path) =>
+    `px-4 py-2 rounded-lg transition-colors duration-200 font-medium ${
+      isActivePath(path)
+        ? 'bg-blue-50 text-blue-600'
+        : 'text-gray-600 hover:bg-gray-50 hover:text-blue-600'
+    }`;
+
+  const authButtonClasses = "px-6 py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105";
+
   return (
-    <header className="sticky top-0 bg-white shadow z-50">
+    <header className="sticky top-0 bg-white shadow-md z-50">
       <div className="flex flex-col md:flex-row items-center justify-between p-4 mx-auto max-w-7xl">
         {/* Logo */}
-        <Link to="/">
-          <img src="../imgs/logo1.jpg" alt="Logo" className="h-12 w-auto rounded mb-4 md:mb-0" />
+        <Link to="/" className="transform transition-transform duration-200 hover:scale-105">
+          <img src="../imgs/logo1.jpg" alt="Logo" className="h-12 w-auto rounded-lg shadow-sm" />
         </Link>
 
-        {/* Barra de búsqueda */}
-        <div className="flex items-center w-full md:w-auto md:ml-4">
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={handleSearch}
-            placeholder="Buscar..."
-            className="border rounded px-4 py-2 w-full md:w-64"
-          />
-        </div>
+        {/* Search Bar - Solo visible cuando está autenticado */}
+        {isAuthenticated && (
+          <div className="flex items-center w-full md:w-auto md:ml-4 my-4 md:my-0">
+            <div className="relative w-full md:w-64">
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={handleSearch}
+                placeholder="Buscar..."
+                className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all duration-200 outline-none"
+              />
+              <svg
+                className="absolute right-3 top-2.5 h-5 w-5 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+            </div>
+          </div>
+        )}
 
-        {/* Menú y autenticación */}
-        <nav
-          id="menu"
-          className={`md:flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4 mb-4 md:mb-0 ${isMenuOpen ? 'block' : 'hidden'}`}
-        >
-          <Link to="/" className="text-gray-600 hover:text-blue-500">
+        {/* Navigation Menu */}
+        <nav className={`md:flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-2 ${
+          isMenuOpen ? 'flex' : 'hidden md:flex'
+        }`}>
+          <Link to="/" className={navLinkClasses('/')}>
             Home
           </Link>
           {isAuthenticated ? (
             <>
-              <Link to="/connect" className="text-gray-600 hover:text-blue-500">
+              <Link to="/connect" className={navLinkClasses('/connect')}>
                 Conecta
               </Link>
-              <Link to="/trades" className="text-gray-600 hover:text-blue-500">
+              <Link to="/trades" className={navLinkClasses('/trades')}>
                 Trades
               </Link>
-              <Link to="/about-us" className="text-gray-600 hover:text-blue-500">
+              <Link to="/about-us" className={navLinkClasses('/about-us')}>
                 Nosotros
               </Link>
             </>
           ) : (
             <>
-              <Link to="/trades" className="text-gray-600 hover:text-blue-500">
+              <Link to="/trades" className={navLinkClasses('/trades')}>
                 Trades
               </Link>
-              <Link to="/about-us" className="text-gray-600 hover:text-blue-500">
+              <Link to="/about-us" className={navLinkClasses('/about-us')}>
                 Nosotros
               </Link>
             </>
           )}
         </nav>
 
-        {/* Usuario o autenticación */}
+        {/* User Profile or Auth Buttons */}
         {isAuthenticated ? (
-          <div className="relative group">
-            <div className="flex items-center space-x-2 cursor-pointer">
+          <div className="relative" ref={profileMenuRef}>
+            <button
+              onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
+              className="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors duration-200"
+            >
               <img
-                src={user.profileImage}
+                src={user?.avatar || 'https://via.placeholder.com/40'}
                 alt="Profile"
-                className="h-10 w-10 rounded-full border-2 border-gray-200"
+                className="h-10 w-10 rounded-full border-2 border-gray-200 object-cover"
               />
-              <span className="text-gray-800 font-medium">{user.name}</span>
-            </div>
-            <div className="absolute right-0 mt-2 bg-white shadow-lg rounded-md w-48 hidden group-hover:block">
-              <ul className="py-2">
-                <li>
-                  <Link to="/perfil" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                    Ir a mi perfil
-                  </Link>
-                </li>
-                <li>
-                  <button
-                    onClick={logout}
-                    className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
-                  >
-                    Cerrar sesión
-                  </button>
-                </li>
-              </ul>
+              <span className="text-gray-800 font-medium">{user?.name || 'Usuario'}</span>
+            </button>
+            
+            <div className={`absolute right-0 mt-2 w-56 ${
+              isProfileMenuOpen ? 'block' : 'hidden'
+            }`}>
+              <div className="py-1 bg-white rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
+                <Link
+                  to="/my-profile"
+                  className="block px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+                >
+                  Ir a mi perfil
+                </Link>
+                <button
+                  onClick={logout}
+                  className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 transition-colors duration-200"
+                >
+                  Cerrar sesión
+                </button>
+              </div>
             </div>
           </div>
         ) : (
-          <div className="flex space-x-4">
-            <Link to="/login" className="text-gray-600 hover:text-blue-500">
+          <div className="flex space-x-3">
+            <Link
+              to="/login"
+              className={`${authButtonClasses} bg-blue-500 text-white hover:bg-blue-600`}
+            >
               Iniciar Sesión
             </Link>
-            <Link to="/register" className="text-gray-600 hover:text-blue-500">
+            <Link
+              to="/register"
+              className={`${authButtonClasses} border border-blue-500 text-blue-500 hover:bg-blue-50`}
+            >
               Registrarse
             </Link>
           </div>

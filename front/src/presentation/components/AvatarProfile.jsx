@@ -1,10 +1,18 @@
 import React from 'react';
+import useAuthState from '../../hooks/useAuthState';
 
 export const AvatarProfile = ({ user, updateAvatar }) => {
-  const handleAvatarChange = (event) => {
+  const { updateUserAvatar } = useAuthState();
+
+  const handleAvatarChange = async (event) => {
     const file = event.target.files[0];
     if (file) {
-      updateAvatar(file);
+      try {
+        const updatedUser = await updateAvatar(file);
+        updateUserAvatar(updatedUser.avatar);
+      } catch (error) {
+        console.error('Error updating avatar:', error);
+      }
     }
   };
 
@@ -31,6 +39,7 @@ export const AvatarProfile = ({ user, updateAvatar }) => {
     </div>
   );
 };
+
 
 
 

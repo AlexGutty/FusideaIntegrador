@@ -11,7 +11,7 @@ const UserDirectory = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const { rating, setRating, ratingStatus, handleRating } = useRating(refetchUsers);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div>Cargando...</div>;
   if (error) return <div>Error: {error}</div>;
 
   return (
