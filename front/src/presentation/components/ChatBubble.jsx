@@ -43,7 +43,7 @@ const ChatBubble = () => {
               onChange={(e) => setSelectedChatRoom(Number(e.target.value))}
               className="w-full p-2 border rounded"
             >
-              <option value="">Selecciona una sala de chat</option>
+              <option value="">Selecciona un Chat</option>
               {chatRooms?.map((room) => (
                 <option key={room.id} value={room.id}>
                   {room.name}
@@ -59,7 +59,7 @@ const ChatBubble = () => {
             ) : (
               messages.map((msg) => (
                 <div key={msg.id_messages} className="mb-2">
-                  <strong>{msg.senderId === 1 ? 'Tú' : 'Otro'}:</strong> {msg.message}
+                  <strong>{msg.senderId === 1 ? 'Tú' : 'Otros'}:</strong> {msg.message}
                 </div>
               ))
             )}
@@ -88,3 +88,4 @@ const ChatBubble = () => {
 }
 
 export default ChatBubble;
+

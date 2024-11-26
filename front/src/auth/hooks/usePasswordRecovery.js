@@ -1,6 +1,5 @@
 import { useState } from 'react';
 
-// Custom hook para manejar el formulario de recuperación de contraseña
 const usePasswordRecovery = () => {
   const [email, setEmail] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
@@ -8,21 +7,30 @@ const usePasswordRecovery = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Aquí se puede integrar la lógica de backend para enviar el correo de recuperación
-    // Ejemplo: const response = await fetch(...)
-
-    setSuccessMessage('Enlace de recuperación enviado con éxito');
+    setSuccessMessage('');
     setErrorMessage('');
+
+    try {
+      const response = await fetch('/api/password-recovery', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Password recovery request failed');
+      }
+
+      setSuccessMessage('Se ha enviado un enlace de recuperación a tu correo electrónico.');
+    } catch (err) {
+      setErrorMessage('No se pudo procesar la solicitud. Por favor, inténtalo de nuevo.');
+      console.error('Password recovery error:', err);
+    }
   };
 
-  return {
-    email,
-    errorMessage,
-    successMessage,
-    setEmail,
-    handleSubmit,
-  };
+  return { email, setEmail, successMessage, errorMessage, handleSubmit };
 };
 
 export default usePasswordRecovery;

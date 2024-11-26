@@ -15,7 +15,7 @@ const PasswordRecoveryForm = () => {
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <img
           className="mx-auto h-16 w-auto rounded"
-          src="../imgs/logo2.jpg"
+          src="/imgs/logo2.jpg"
           alt="Your Company"
         />
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
@@ -58,3 +58,4 @@ const PasswordRecoveryForm = () => {
 };
 
 export default PasswordRecoveryForm;
+

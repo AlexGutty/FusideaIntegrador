@@ -1,9 +1,7 @@
-// LoginForm.jsx
 import React from 'react';
 import useLoginForm from '../hooks/useLoginForm';
 
 const LoginForm = () => {
-  // Usar el hook personalizado
   const { formData, handleChange, handleSubmit } = useLoginForm();
 
   return (
@@ -11,7 +9,7 @@ const LoginForm = () => {
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <img
           className="mx-auto h-16 w-auto rounded"
-          src="../imgs/logo2.jpg"
+          src="/imgs/logo2.jpg"
           alt="Your Company"
         />
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
@@ -21,7 +19,6 @@ const LoginForm = () => {
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
         <form className="space-y-6" onSubmit={handleSubmit}>
-          {/* Input para el correo electrónico */}
           <div>
             <label
               htmlFor="email"
@@ -43,7 +40,6 @@ const LoginForm = () => {
             </div>
           </div>
 
-          {/* Input para la contraseña */}
           <div>
             <div className="flex items-center justify-between">
               <label
@@ -75,7 +71,6 @@ const LoginForm = () => {
             </div>
           </div>
 
-          {/* Botón para enviar el formulario */}
           <div>
             <button
               type="submit"
@@ -86,7 +81,6 @@ const LoginForm = () => {
           </div>
         </form>
 
-        {/* Enlace para crear una nueva cuenta */}
         <p className="mt-10 text-center text-sm text-gray-500">
           ¿No eres miembro?{' '}
           <a
@@ -102,3 +96,5 @@ const LoginForm = () => {
 };
 
 export default LoginForm;
+
+

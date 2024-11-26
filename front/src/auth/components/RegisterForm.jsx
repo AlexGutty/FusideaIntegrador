@@ -3,22 +3,21 @@ import useRegister from '../hooks/useRegister';
 
 const RegisterForm = () => {
   const {
+    id_speciality,
+    id_role,
     name,
-    lastName,
+    last_name,
     email,
+    gender,
+    phoneNumber,
+    aboutname,
     password,
     confirmPassword,
-    phoneNumber,
-    about,
-    errorMessage,
+    avatar,
+    banner,
     successMessage,
-    setName,
-    setLastName,
-    setEmail,
-    setPassword,
-    setConfirmPassword,
-    setPhoneNumber,
-    setAbout,
+    errorMessage,
+    handleChange,
     handleSubmit,
   } = useRegister();
 
@@ -27,7 +26,7 @@ const RegisterForm = () => {
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <img
           className="mx-auto h-16 w-auto rounded"
-          src="../imgs/logo2.jpg"
+          src="/imgs/logo2.jpg"
           alt="Your Company"
         />
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
@@ -36,8 +35,41 @@ const RegisterForm = () => {
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        {/* Formulario de registro */}
         <form className="space-y-6" onSubmit={handleSubmit}>
+          <div>
+            <label htmlFor="id_speciality" className="block text-sm font-medium leading-6 text-gray-900">
+              Especialidad
+            </label>
+            <select
+              id="id_speciality"
+              name="id_speciality"
+              value={id_speciality}
+              onChange={handleChange}
+              required
+              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            >
+              <option value="">Selecciona una especialidad</option>
+              {/* Aquí deberías agregar las opciones de especialidades */}
+            </select>
+          </div>
+
+          <div>
+            <label htmlFor="id_role" className="block text-sm font-medium leading-6 text-gray-900">
+              Rol
+            </label>
+            <select
+              id="id_role"
+              name="id_role"
+              value={id_role}
+              onChange={handleChange}
+              required
+              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            >
+              <option value="">Selecciona un rol</option>
+              {/* Aquí deberías agregar las opciones de roles */}
+            </select>
+          </div>
+
           <div>
             <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900">
               Nombre
@@ -47,7 +79,7 @@ const RegisterForm = () => {
               name="name"
               type="text"
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={handleChange}
               required
               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />
@@ -61,8 +93,8 @@ const RegisterForm = () => {
               id="last_name"
               name="last_name"
               type="text"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
+              value={last_name}
+              onChange={handleChange}
               required
               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />
@@ -77,8 +109,55 @@ const RegisterForm = () => {
               name="email"
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={handleChange}
               required
+              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="gender" className="block text-sm font-medium leading-6 text-gray-900">
+              Género
+            </label>
+            <select
+              id="gender"
+              name="gender"
+              value={gender}
+              onChange={handleChange}
+              required
+              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            >
+              <option value="">Selecciona un género</option>
+              <option value="MASCULINO">Masculino</option>
+              <option value="FEMENINO">Femenino</option>
+              <option value="OTRO">Otro</option>
+            </select>
+          </div>
+
+          <div>
+            <label htmlFor="phoneNumber" className="block text-sm font-medium leading-6 text-gray-900">
+              Número de Teléfono
+            </label>
+            <input
+              id="phoneNumber"
+              name="phoneNumber"
+              type="tel"
+              value={phoneNumber}
+              onChange={handleChange}
+              required
+              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="aboutname" className="block text-sm font-medium leading-6 text-gray-900">
+              Acerca de ti
+            </label>
+            <textarea
+              id="aboutname"
+              name="aboutname"
+              value={aboutname}
+              onChange={handleChange}
               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />
           </div>
@@ -92,52 +171,62 @@ const RegisterForm = () => {
               name="password"
               type="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={handleChange}
               required
               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />
           </div>
 
           <div>
-            <label htmlFor="confirm_password" className="block text-sm font-medium leading-6 text-gray-900">
+            <label htmlFor="confirmPassword" className="block text-sm font-medium leading-6 text-gray-900">
               Confirmar Contraseña
             </label>
             <input
-              id="confirm_password"
-              name="confirm_password"
+              id="confirmPassword"
+              name="confirmPassword"
               type="password"
               value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              onChange={handleChange}
               required
               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />
           </div>
 
           <div>
-            <label htmlFor="phoneNumber" className="block text-sm font-medium leading-6 text-gray-900">
-              Número de Teléfono
+            <label htmlFor="avatar" className="block text-sm font-medium leading-6 text-gray-900">
+              Avatar
             </label>
             <input
-              id="phoneNumber"
-              name="phoneNumber"
-              type="tel"
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-              required
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              id="avatar"
+              name="avatar"
+              type="file"
+              onChange={handleChange}
+              accept="image/*"
+              className="block w-full text-sm text-gray-500
+                file:mr-4 file:py-2 file:px-4
+                file:rounded-full file:border-0
+                file:text-sm file:font-semibold
+                file:bg-indigo-50 file:text-indigo-700
+                hover:file:bg-indigo-100"
             />
           </div>
 
           <div>
-            <label htmlFor="about" className="block text-sm font-medium leading-6 text-gray-900">
-              Acerca de ti
+            <label htmlFor="banner" className="block text-sm font-medium leading-6 text-gray-900">
+              Banner
             </label>
-            <textarea
-              id="about"
-              name="about"
-              value={about}
-              onChange={(e) => setAbout(e.target.value)}
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            <input
+              id="banner"
+              name="banner"
+              type="file"
+              onChange={handleChange}
+              accept="image/*"
+              className="block w-full text-sm text-gray-500
+                file:mr-4 file:py-2 file:px-4
+                file:rounded-full file:border-0
+                file:text-sm file:font-semibold
+                file:bg-indigo-50 file:text-indigo-700
+                hover:file:bg-indigo-100"
             />
           </div>
 
@@ -159,3 +248,5 @@ const RegisterForm = () => {
 };
 
 export default RegisterForm;
+
+

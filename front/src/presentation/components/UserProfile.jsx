@@ -1,11 +1,11 @@
 import React from 'react';
-import ProfileBanner from './ProfileBanner';
+import { BannerProfile } from './BannerProfile';
 import ProfileInfo from './ProfileInfo';
 import SectionItem from './SectionItem';
 
 const UserProfile = ({ profileData }) => (
   <div className="max-w-4xl mx-auto mt-10 bg-white rounded-lg shadow-lg overflow-hidden">
-    <ProfileBanner profileImage={profileData.profileImage} />
+    <BannerProfile profileImage={profileData.profileImage} />
 
     <div className="px-6 py-4">
       <ProfileInfo

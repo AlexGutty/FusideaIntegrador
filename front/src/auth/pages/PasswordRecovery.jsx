@@ -9,7 +9,7 @@ const PasswordRecovery = () => {
     <div>
  
       <main className="bg-white">
-        <PasswordRecoveryForm /> {/* Formulario de Login */}
+        <PasswordRecoveryForm /> 
       </main>
 
     </div>

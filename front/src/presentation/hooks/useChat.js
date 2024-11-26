@@ -1,59 +1,70 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useQuery, useMutation, useQueryClient } from 'react-query';
-import chatService from '../services/chatService';
+import { useState, useEffect } from 'react';
 
 const useChat = (chatRoomId) => {
   const [messages, setMessages] = useState([]);
-  const queryClient = useQueryClient();
-
-  const { data: chatRooms } = useQuery('chatRooms', chatService.getChatRooms);
-
-  const { data: fetchedMessages, isLoading, error } = useQuery(
-    ['messages', chatRoomId],
-    () => chatService.getMessages(chatRoomId),
-    {
-      enabled: !!chatRoomId,
-    }
-  );
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [chatRooms, setChatRooms] = useState([]);
 
   useEffect(() => {
-    if (fetchedMessages) {
-      setMessages(fetchedMessages);
+    if (chatRoomId) {
+      fetchMessages(chatRoomId);
     }
-  }, [fetchedMessages]);
+    fetchChatRooms();
+  }, [chatRoomId]);
 
-  const sendMessageMutation = useMutation(chatService.sendMessage, {
-    onSuccess: (newMessage) => {
-      queryClient.invalidateQueries(['messages', chatRoomId]);
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
-    },
-  });
-
-  const sendMessage = useCallback(
-    (content) => {
-      if (chatRoomId) {
-        sendMessageMutation.mutate({
-          senderId: 1, // Usamos un ID fijo para el remitente
-          receivedId: 0,
-          message: content,
-          chatRoomId,
-        });
+  const fetchMessages = async (roomId) => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`/api/messages/${roomId}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch messages');
       }
-    },
-    [chatRoomId, sendMessageMutation]
-  );
-
-  return {
-    messages,
-    sendMessage,
-    isLoading,
-    error,
-    chatRooms,
+      const data = await response.json();
+      setMessages(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
+
+  const fetchChatRooms = async () => {
+    try {
+      const response = await fetch('/api/chatrooms');
+      if (!response.ok) {
+        throw new Error('Failed to fetch chat rooms');
+      }
+      const data = await response.json();
+      setChatRooms(data);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const sendMessage = async (message) => {
+    try {
+      const response = await fetch('/api/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message, chatRoomId }),
+      });
+      if (!response.ok) {
+        throw new Error('Failed to send message');
+      }
+      const newMessage = await response.json();
+      setMessages([...messages, newMessage]);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  return { messages, sendMessage, isLoading, error, chatRooms };
 };
 
 export default useChat;
-
 
 
 
