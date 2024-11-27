@@ -4,7 +4,7 @@ import { NoSymbolIcon } from '@heroicons/react/24/solid';
 const FriendList = ({ friends, onBlock }) => {
   return (
     <div className="mb-8">
-      <h3 className="text-xl font-semibold mb-2">Your Friends</h3>
+      <h3 className="text-xl font-semibold mb-2">Tus amigos</h3>
       {friends.length > 0 ? (
         <ul className="space-y-2">
           {friends.map(friend => (

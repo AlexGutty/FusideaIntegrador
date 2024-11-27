@@ -1,3 +1,20 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+  @keyframes slide-down {
+    0% {
+      transform: translateY(-50px); /* Posición inicial, por encima */
+      opacity: 0; /* Completamente transparente */
+    }
+    100% {
+      transform: translateY(0); /* Posición final */
+      opacity: 1; /* Totalmente visible */
+    }
+  }
+
+  .animate-slide-down {
+    animation: slide-down 0.8s ease-out; /* Aplica la animación */
+  }
+}

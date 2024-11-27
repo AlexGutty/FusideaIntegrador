@@ -4,7 +4,7 @@ import { UserPlusIcon, UserMinusIcon } from '@heroicons/react/24/solid';
 const PendingRequests = ({ requests, onAccept, onReject }) => {
   return (
     <div className="mb-8">
-      <h3 className="text-xl font-semibold mb-2">Pending Requests</h3>
+      <h3 className="text-xl font-semibold mb-2">Solicitudes Pendientes</h3>
       {requests.length > 0 ? (
         <ul className="space-y-2">
           {requests.map(request => (
@@ -28,7 +28,7 @@ const PendingRequests = ({ requests, onAccept, onReject }) => {
           ))}
         </ul>
       ) : (
-        <p>No pending friend requests.</p>
+        <p>No hay solicitudes de amistad Pendientes.</p>
       )}
     </div>
   );

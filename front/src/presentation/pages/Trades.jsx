@@ -1,7 +1,5 @@
 import React from 'react';
 import MyTrades from '../components/MyTrades'; 
-import '../index.css';
-import '../assets/styles/global.css';
 
 const Trades = () => {
   return (

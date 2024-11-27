@@ -11,6 +11,7 @@ const Header = () => {
   const profileMenuRef = useRef(null);
   const location = useLocation();
 
+
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
     console.log('Buscando:', e.target.value);
@@ -92,11 +93,11 @@ const Header = () => {
               <Link to="/connect" className={navLinkClasses('/connect')}>
                 Conecta
               </Link>
-              <Link to="/trades" className={navLinkClasses('/trades')}>
+              <Link to="/my-trades" className={navLinkClasses('/trades')}>
                 Trades
               </Link>
-              <Link to="/about-us" className={navLinkClasses('/about-us')}>
-                Nosotros
+              <Link to="/templates" className={navLinkClasses('/about-us')}>
+                Plantillas
               </Link>
             </>
           ) : (
