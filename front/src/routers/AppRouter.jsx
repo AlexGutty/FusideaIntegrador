@@ -15,6 +15,7 @@ import FriendshipManager from '../presentation/pages/FriendshipManager';
 import UserDirectory from '../presentation/pages/userDirectory';
 import Templates from '../presentation/pages/Templates';
 import SuccessStoriesPage from '../pages/SuccessStoriesPage';
+import CoursesPage from '../presentation/pages/CoursesPage';
 const AppRouter = () => {
   return (
     <BrowserRouter>
@@ -36,6 +37,7 @@ const AppRouter = () => {
             <Route path="friendship-manager" element={<FriendshipManager />} />
             <Route path="my-profile" element={<UserProfileProfile />} />
             <Route path="my-trades" element={<Trades />} />
+            <Route path="courses" element={<CoursesPage />} />
           </Route>
         </Route>
       </Routes>
