@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import useMenu from '../hooks/useMenu';
 import useAuthState from '../hooks/useAuthState';
+import { HomeIcon, UserGroupIcon, CurrencyDollarIcon, DocumentDuplicateIcon, AcademicCapIcon, UserCircleIcon, ArrowRightOnRectangleIcon } from '@heroicons/react/24/outline';
 
 const Header = () => {
   const { isMenuOpen, toggleMenu } = useMenu();
@@ -10,7 +11,6 @@ const Header = () => {
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const profileMenuRef = useRef(null);
   const location = useLocation();
-
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
@@ -37,13 +37,13 @@ const Header = () => {
   };
 
   const navLinkClasses = (path) =>
-    `px-4 py-2 rounded-lg transition-colors duration-200 font-medium ${
+    `flex items-center px-4 py-2 rounded-lg transition-colors duration-200 font-medium ${
       isActivePath(path)
-        ? 'bg-blue-50 text-blue-600'
-        : 'text-gray-600 hover:bg-gray-50 hover:text-blue-600'
+        ? 'bg-[#e8f3e5] text-[#4c9141]'
+        : 'text-gray-600 hover:bg-[#f0f9ed] hover:text-[#4c9141]'
     }`;
 
-  const authButtonClasses = "px-6 py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105";
+  const authButtonClasses = "flex items-center px-6 py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105";
 
   return (
     <header className="sticky top-0 bg-white shadow-md z-50">
@@ -62,7 +62,7 @@ const Header = () => {
                 value={searchTerm}
                 onChange={handleSearch}
                 placeholder="Buscar..."
-                className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all duration-200 outline-none"
+                className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-[#4c9141] focus:ring-2 focus:ring-[#e8f3e5] transition-all duration-200 outline-none"
               />
               <svg
                 className="absolute right-3 top-2.5 h-5 w-5 text-gray-400"
@@ -86,26 +86,36 @@ const Header = () => {
           isMenuOpen ? 'flex' : 'hidden md:flex'
         }`}>
           <Link to="/" className={navLinkClasses('/')}>
+            <HomeIcon className="w-5 h-5 mr-2" />
             Home
           </Link>
           {isAuthenticated ? (
             <>
               <Link to="/connect" className={navLinkClasses('/connect')}>
+                <UserGroupIcon className="w-5 h-5 mr-2" />
                 Conecta
               </Link>
               <Link to="/my-trades" className={navLinkClasses('/trades')}>
+                <CurrencyDollarIcon className="w-5 h-5 mr-2" />
                 Trades
               </Link>
-              <Link to="/templates" className={navLinkClasses('/about-us')}>
+              <Link to="/templates" className={navLinkClasses('/templates')}>
+                <DocumentDuplicateIcon className="w-5 h-5 mr-2" />
                 Plantillas
+              </Link>
+              <Link to="/courses" className={navLinkClasses('/courses')}>
+                <AcademicCapIcon className="w-5 h-5 mr-2" />
+                Cursos
               </Link>
             </>
           ) : (
             <>
               <Link to="/trades" className={navLinkClasses('/trades')}>
+                <CurrencyDollarIcon className="w-5 h-5 mr-2" />
                 Trades
               </Link>
               <Link to="/about-us" className={navLinkClasses('/about-us')}>
+                <UserGroupIcon className="w-5 h-5 mr-2" />
                 Nosotros
               </Link>
             </>
@@ -117,12 +127,12 @@ const Header = () => {
           <div className="relative" ref={profileMenuRef}>
             <button
               onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
-              className="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors duration-200"
+              className="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-[#f0f9ed] transition-colors duration-200"
             >
               <img
                 src={user?.avatar || 'https://via.placeholder.com/40'}
                 alt="Profile"
-                className="h-10 w-10 rounded-full border-2 border-gray-200 object-cover"
+                className="h-10 w-10 rounded-full border-2 border-[#4c9141] object-cover"
               />
               <span className="text-gray-800 font-medium">{user?.name || 'Usuario'}</span>
             </button>
@@ -133,14 +143,16 @@ const Header = () => {
               <div className="py-1 bg-white rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
                 <Link
                   to="/my-profile"
-                  className="block px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+                  className="flex items-center px-4 py-2 text-gray-700 hover:bg-[#f0f9ed] transition-colors duration-200"
                 >
+                  <UserCircleIcon className="w-5 h-5 mr-2 text-[#4c9141]" />
                   Ir a mi perfil
                 </Link>
                 <button
                   onClick={logout}
-                  className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 transition-colors duration-200"
+                  className="flex items-center w-full text-left px-4 py-2 text-[#4c9141] hover:bg-[#f0f9ed] transition-colors duration-200"
                 >
+                  <ArrowRightOnRectangleIcon className="w-5 h-5 mr-2" />
                   Cerrar sesión
                 </button>
               </div>
@@ -150,14 +162,16 @@ const Header = () => {
           <div className="flex space-x-3">
             <Link
               to="/login"
-              className={`${authButtonClasses} bg-blue-500 text-white hover:bg-blue-600`}
+              className={`${authButtonClasses} bg-[#4c9141] text-white hover:bg-[#3a6f32]`}
             >
+              <UserCircleIcon className="w-5 h-5 mr-2" />
               Iniciar Sesión
             </Link>
             <Link
               to="/register"
-              className={`${authButtonClasses} border border-blue-500 text-blue-500 hover:bg-blue-50`}
+              className={`${authButtonClasses} border-2 border-[#4c9141] text-[#4c9141] hover:bg-[#f0f9ed]`}
             >
+              <UserGroupIcon className="w-5 h-5 mr-2" />
               Registrarse
             </Link>
           </div>
