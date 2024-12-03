@@ -3,6 +3,12 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
+/**
+ * Componente principal de la aplicación.
+ * Este componente muestra el logo de Vite y React, y un contador que se incrementa
+ * cuando el usuario hace clic en el botón.
+ * @returns {JSX.Element} El componente que representa la interfaz de usuario con el logo y el contador.
+ */
 function App() {
   const [count, setCount] = useState(0)
 
