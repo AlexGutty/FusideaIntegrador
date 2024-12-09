@@ -1,49 +1,47 @@
 import { useState } from 'react';
+import axios from 'axios';
 
 const useLoginForm = () => {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-  });
+  const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevData => ({
-      ...prevData,
-      [name]: value
-    }));
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     setError('');
 
     try {
-      const response = await fetch('/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = await axios.post('http://localhost:3000/api/auth/login', formData);
+      const { token, user } = response.data;
 
-      if (!response.ok) {
-        throw new Error('Login failed');
-      }
+      // Guarda el token en el almacenamiento local
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(user));
 
-      const data = await response.json();
-      // Handle successful login (e.g., store token, redirect)
-      console.log('Login successful', data);
-    } catch (err) {
-      setError('Invalid email or password');
-      console.error('Login error:', err);
+      // Redirige o maneja el estado de autenticación
+      window.location.href = '/dashboard'; // Cambia esta ruta según tu lógica
+    } catch (error) {
+      setError(
+        error.response?.data?.message || 'Ocurrió un error. Por favor, intenta nuevamente.'
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
-  return { formData, handleChange, handleSubmit, error };
+  return {
+    formData,
+    handleChange,
+    handleSubmit,
+    error,
+    loading,
+  };
 };
 
 export default useLoginForm;
-
-

@@ -2,7 +2,7 @@ import React from 'react';
 import useLoginForm from '../hooks/useLoginForm';
 
 const LoginForm = () => {
-  const { formData, handleChange, handleSubmit } = useLoginForm();
+  const { formData, handleChange, handleSubmit, error, loading } = useLoginForm();
 
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
@@ -71,12 +71,23 @@ const LoginForm = () => {
             </div>
           </div>
 
+          {error && (
+            <p className="mt-2 text-sm text-red-600">
+              {error}
+            </p>
+          )}
+
           <div>
             <button
               type="submit"
-              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              disabled={loading}
+              className={`flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm ${
+                loading
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : 'bg-indigo-600 hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
+              }`}
             >
-              Iniciar sesión
+              {loading ? 'Cargando...' : 'Iniciar sesión'}
             </button>
           </div>
         </form>
