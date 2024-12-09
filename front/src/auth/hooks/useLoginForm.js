@@ -6,6 +6,7 @@ const useLoginForm = () => {
     password: '',
   });
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,9 +19,10 @@ const useLoginForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setIsLoading(true);
 
     try {
-      const response = await fetch('/api/login', {
+      const response = await fetch('http://localhost:3000/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -28,22 +30,24 @@ const useLoginForm = () => {
         body: JSON.stringify(formData),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        throw new Error('Login failed');
+        throw new Error(data.message || 'Login failed');
       }
 
-      const data = await response.json();
-      // Handle successful login (e.g., store token, redirect)
-      console.log('Login successful', data);
+      // Handle successful login
+      localStorage.setItem('token', data.token);
+      // Redirect to dashboard or home page
+      window.location.href = '/dashboard';
     } catch (err) {
-      setError('Invalid email or password');
-      console.error('Login error:', err);
+      setError(err.message || 'Invalid email or password');
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  return { formData, handleChange, handleSubmit, error };
+  return { formData, handleChange, handleSubmit, error, isLoading };
 };
 
 export default useLoginForm;
-
-

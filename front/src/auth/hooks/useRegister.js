@@ -17,6 +17,7 @@ const useRegister = () => {
   });
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
@@ -30,9 +31,11 @@ const useRegister = () => {
     e.preventDefault();
     setSuccessMessage('');
     setErrorMessage('');
+    setIsLoading(true);
 
     if (formData.password !== formData.confirmPassword) {
       setErrorMessage('Las contraseñas no coinciden');
+      setIsLoading(false);
       return;
     }
 
@@ -44,19 +47,26 @@ const useRegister = () => {
         }
       }
 
-      const response = await fetch('/api/register', {
+      const response = await fetch('http://localhost:3000/api/auth/register', {
         method: 'POST',
         body: formDataToSend,
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        throw new Error('Registration failed');
+        throw new Error(data.message || 'Registration failed');
       }
 
       setSuccessMessage('Registro exitoso. Por favor, inicia sesión.');
+      // Optionally, you can automatically log in the user here
+      // by storing the token and redirecting to the dashboard
+      localStorage.setItem('token', data.token);
+      window.location.href = '/dashboard';
     } catch (err) {
-      setErrorMessage('No se pudo completar el registro. Por favor, inténtalo de nuevo.');
-      console.error('Registration error:', err);
+      setErrorMessage(err.message || 'No se pudo completar el registro. Por favor, inténtalo de nuevo.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -76,11 +86,10 @@ const useRegister = () => {
     setBanner: (file) => handleChange({ target: { name: 'banner', type: 'file', files: [file] } }),
     successMessage,
     errorMessage,
+    isLoading,
     handleChange,
     handleSubmit,
   };
 };
 
 export default useRegister;
-
-
