@@ -57,4 +57,4 @@ const usePasswordReset = () => {
   };
 };
 
-export default usePasswordReset;
+export default usePasswordReset ;

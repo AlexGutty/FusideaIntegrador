@@ -38,4 +38,4 @@ const usePasswordRecovery = () => {
   return { email, setEmail, successMessage, errorMessage, isLoading, handleSubmit };
 };
 
-export default usePasswordRecovery;
+export default usePasswordRecovery ;
