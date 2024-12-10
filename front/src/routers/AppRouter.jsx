@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Layout from '../components/Layout';
 import HomePublicPage from '../pages/HomePublicPage';
@@ -16,6 +15,7 @@ import UserDirectory from '../presentation/pages/userDirectory';
 import Templates from '../presentation/pages/Templates';
 import SuccessStoriesPage from '../pages/SuccessStoriesPage';
 import CoursesPage from '../presentation/pages/CoursesPage';
+import MyTrades  from '../presentation/pages/MyTrades'; 
 const AppRouter = () => {
   return (
     <BrowserRouter>
@@ -28,6 +28,7 @@ const AppRouter = () => {
           <Route path="register" element={<Register />} />
           <Route path="trades" element={<TradesPage />} />
           <Route path="success-stories" element={<SuccessStoriesPage />} />
+          <Route path="my-trades" element={<MyTrades />} />
           {/* Protected Routes */}
           <Route element={<PrivateRoute />}>
           <Route index element={<HomePage />} />
