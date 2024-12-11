@@ -11,10 +11,60 @@
 
 La estructura del proyecto es la siguiente:
 
-### Componentes (`/src/components`)
+### Componentes (`/src/auth/components`)
 
-- **`Footer.jsx`**: Componente que renderiza el pie de página de la web, que podría incluir información de contacto, enlaces de redes sociales, derechos de autor, etc.
-- **`Header.jsx`**: Componente que renderiza la cabecera de la web, que incluye el logotipo y las opciones de navegación principales.
+- **`LoginForm.jsx`**: El componente LoginForm es un formulario para que los usuarios ingresen sus credenciales (correo electrónico y contraseña) y se autentiquen en la aplicación.
+
+Renderiza un formulario de inicio de sesión con los siguientes elementos:
+Campo para el correo electrónico.
+Campo para la contraseña.
+Mensaje de error si ocurre algún problema en la autenticación.
+Enlace para recuperar la contraseña.
+Botón para iniciar sesión, deshabilitado mientras se realiza la solicitud.
+Enlace para que los usuarios puedan registrarse.
+Lógica del componente: Utiliza el hook personalizado useLoginForm para manejar el estado del formulario:
+
+formData: Estado de los valores de los campos del formulario.
+handleChange: Función para actualizar el estado al cambiar los valores de los campos.
+handleSubmit: Función que se ejecuta al enviar el formulario.
+error: Mensaje de error que se muestra si ocurre un problema durante la autenticación.
+loading: Indica si la solicitud está en proceso, deshabilitando la interacción del formulario.
+
+- **`PasswordRecoveryForm.jsx`**: formulario que permite a los usuarios recuperar su contraseña mediante el envío de un correo electrónico.
+Descripción:
+
+Renderiza un formulario donde los usuarios pueden ingresar su correo electrónico para solicitar un enlace de recuperación de contraseña.
+Muestra mensajes de error o éxito según el resultado del intento de recuperación.
+Lógica del componente: Utiliza el hook personalizado usePasswordRecovery para manejar la lógica de recuperación de contraseñas:
+
+email: Estado que almacena el correo electrónico ingresado por el usuario.
+setEmail: Función para actualizar el estado del correo electrónico.
+handleSubmit: Función que se ejecuta al enviar el formulario.
+errorMessage: Mensaje de error que se muestra si ocurre un problema al enviar el correo.
+successMessage: Mensaje de éxito que se muestra si el enlace de recuperación se envía correctamente.
+
+- **`PasswordResetForm.jsx`**: formulario para que los usuarios puedan restablecer su contraseña
+Utiliza el hook personalizado usePasswordReset para gestionar la lógica del formulario:
+
+newPassword: Estado que almacena la nueva contraseña ingresada por el usuario.
+confirmPassword: Estado que almacena la confirmación de la nueva contraseña.
+setNewPassword: Función para actualizar el estado de la nueva contraseña.
+setConfirmPassword: Función para actualizar el estado de la confirmación de la contraseña.
+handleSubmit: Función que se ejecuta al enviar el formulario.
+successMessage: Mensaje de éxito que se muestra si el restablecimiento fue exitoso.
+errorMessage: Mensaje de error que se muestra si ocurrió algún problema.
+
+- **`RegisterForm.jsx`**: permite a los usuarios registrarse en la plataforma proporcionando información personal y profesional
+Lógica del componente: Este componente utiliza el hook useRegister para manejar la lógica del formulario:
+
+Estados principales:
+id_speciality, id_role, name, last_name, email, gender, phoneNumber, aboutname, password, confirmPassword, avatar, banner.
+Funciones:
+handleChange: Manejador general para actualizar los valores de los campos.
+handleSubmit: Función para enviar el formulario.
+Mensajes:
+successMessage: Indica el éxito del registro.
+errorMessage: Notifica errores durante el registro.
 
 ### Contextos (`/src/contexts`)
 

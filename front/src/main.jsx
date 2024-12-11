@@ -1,18 +1,20 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.jsx'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+import './index.css';
 
 /**
-Punto de entrada de la aplicación que monta el componente `App` en el DOM.
+ * Entrada principal de la aplicación React.
  * 
- * Este archivo usa `createRoot` para inicializar la aplicación React en el contenedor con el id 'root',
- * y se renderiza dentro del modo estricto de React para advertir sobre prácticas no recomendadas.
+ * Este archivo se encarga de renderizar la aplicación principal (`App`) dentro del elemento `root` en el HTML.
+ * Utiliza `React.StrictMode` para ayudar a identificar problemas potenciales en la aplicación durante el desarrollo.
  * 
- * @returns {void} No retorna ningún valor.
+ * @returns {JSX.Element} - Renderiza la aplicación en el DOM dentro del contenedor `root`.
  */
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
     <App />
-  </StrictMode>,
-)
+  </React.StrictMode>
+);
