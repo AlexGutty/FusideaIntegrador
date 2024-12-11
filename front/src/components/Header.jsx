@@ -91,7 +91,8 @@ const Header = () => {
           </Link>
           {isAuthenticated ? (
             <>
-              <Link to="/connect" className={navLinkClasses('/connect')}>
+              <Link to="/my-trades
+              " className={navLinkClasses('/connect')}>
                 <UserGroupIcon className="w-5 h-5 mr-2" />
                 Conecta
               </Link>
@@ -149,7 +150,10 @@ const Header = () => {
                   Ir a mi perfil
                 </Link>
                 <button
-                  onClick={logout}
+                  onClick={() => {
+                    logout();
+                    setIsProfileMenuOpen(false);
+                  }}
                   className="flex items-center w-full text-left px-4 py-2 text-[#4c9141] hover:bg-[#f0f9ed] transition-colors duration-200"
                 >
                   <ArrowRightOnRectangleIcon className="w-5 h-5 mr-2" />
@@ -182,3 +186,4 @@ const Header = () => {
 };
 
 export default Header;
+

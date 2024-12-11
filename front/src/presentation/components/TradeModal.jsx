@@ -1,80 +1,48 @@
 import React from 'react';
-import { Dialog, Transition } from '@headlessui/react';
-import { Fragment } from 'react';
-import { XMarkIcon as XIcon, ClockIcon, UserIcon, AcademicCapIcon } from '@heroicons/react/24/outline';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const TradeModal = ({ isOpen, onClose, trade }) => {
   if (!trade) return null;
 
   return (
-    <Transition appear show={isOpen} as={Fragment}>
-      <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={onClose}>
-        <div className="min-h-screen px-4 text-center">
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+          onClick={onClose}
+        >
+          <motion.div
+            initial={{ y: -50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -50, opacity: 0 }}
+            className="bg-white rounded-lg p-8 max-w-md w-full"
+            onClick={(e) => e.stopPropagation()}
           >
-            <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
-          </Transition.Child>
-
-          <span className="inline-block h-screen align-middle" aria-hidden="true">
-            &#8203;
-          </span>
-          
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0 scale-95"
-            enterTo="opacity-100 scale-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100 scale-100"
-            leaveTo="opacity-0 scale-95"
-          >
-            <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
-              <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-[#4c9141]">
-                Trade Details
-              </Dialog.Title>
-              <div className="mt-2">
-                <p className="text-sm text-gray-500 mb-2">
-                  <ClockIcon className="h-5 w-5 inline mr-2" />
-                  Duration: {trade.duration} days
-                </p>
-                <p className="text-sm text-gray-500 mb-2">
-                  <UserIcon className="h-5 w-5 inline mr-2" />
-                  Status: {trade.status}
-                </p>
-                <p className="text-sm text-gray-500 mb-2">
-                  <AcademicCapIcon className="h-5 w-5 inline mr-2" />
-                  Member One Specialty: {trade.memberOne_specialty}
-                </p>
-                <p className="text-sm text-gray-500 mb-2">
-                  <AcademicCapIcon className="h-5 w-5 inline mr-2" />
-                  Member Two Specialty: {trade.memberTwo_specialty}
-                </p>
-                <p className="text-sm text-gray-500">
-                  Expires at: {new Date(trade.expiresAt).toLocaleString()}
-                </p>
-              </div>
-
-              <div className="mt-4 flex justify-end">
-                <button
-                  type="button"
-                  className="text-gray-400 hover:text-gray-500"
-                  onClick={onClose}
-                >
-                  <XIcon className="h-6 w-6" />
-                </button>
-              </div>
-            </div>
-          </Transition.Child>
-        </div>
-      </Dialog>
-    </Transition>
+            <h2 className="text-2xl font-bold mb-4">Trade Details</h2>
+            <p><strong>Trade ID:</strong> {trade.id_trade}</p>
+            <p><strong>Status:</strong> {trade.status}</p>
+            <p><strong>Duration:</strong> {trade.duration} minutes</p>
+            <p><strong>Expires At:</strong> {new Date(trade.expiresAt).toLocaleString()}</p>
+            <p><strong>Member One ID:</strong> {trade.memberOne_id}</p>
+            <p><strong>Member One Specialty:</strong> {trade.memberOne_specialty}</p>
+            <p><strong>Member One Has Rated:</strong> {trade.memberOne_hasRated ? 'Yes' : 'No'}</p>
+            <p><strong>Member Two ID:</strong> {trade.memberTwo_id}</p>
+            <p><strong>Member Two Specialty:</strong> {trade.memberTwo_specialty}</p>
+            <p><strong>Member Two Has Rated:</strong> {trade.memberTwo_hasRated ? 'Yes' : 'No'}</p>
+            <p><strong>Chat Room ID:</strong> {trade.chatRoomId}</p>
+            <button
+              className="mt-6 bg-[#4c9141] text-white px-4 py-2 rounded hover:bg-[#3a6f32]"
+              onClick={onClose}
+            >
+              Close
+            </button>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
 

@@ -23,22 +23,24 @@ const AppRouter = () => {
         <Route path="/" element={<Layout />}>
           {/* Public Routes */}
           <Route index element={<HomePublicPage />} />
+          <Route path="home" element={<HomePage />} />
           <Route path="about-us" element={<AboutUsPage />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="trades" element={<TradesPage />} />
           <Route path="success-stories" element={<SuccessStoriesPage />} />
           <Route path="my-trades" element={<MyTrades />} />
-          {/* Protected Routes */}
-          <Route element={<PrivateRoute />}>
-          <Route index element={<HomePage />} />
-            <Route path="perfil" element={<UserProfilePage />} />
+                      <Route path="perfil" element={<UserProfilePage />} />
             <Route path="templates" element={<Templates />} />
             <Route path="user-directory" element={<UserDirectory />} />
             <Route path="friendship-manager" element={<FriendshipManager />} />
             <Route path="my-profile" element={<UserProfileProfile />} />
             <Route path="my-trades" element={<Trades />} />
             <Route path="courses" element={<CoursesPage />} />
+          {/* Protected Routes */}
+          <Route element={<PrivateRoute />}>
+          <Route index element={<HomePage />} />
+
           </Route>
         </Route>
       </Routes>

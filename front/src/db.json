@@ -1,0 +1,87 @@
+{
+    "users": [
+      {
+        "id_user": 1,
+        "id_speciality": 1,
+        "id_role": 1,
+        "name": "Juan",
+        "gender": "MASCULINO",
+        "last_name": "Pérez",
+        "email": "juan.perez@gmail.com",
+        "email_verified": 1,
+        "average_rating": 4.5,
+        "password": "hashed_password",
+        "avatar": "avatar1.png",
+        "banner": "banner1.png",
+        "aboutname": "Sobre Juan",
+        "phoneNumber": "123456789",
+        "token_password": null,
+        "password_token": null
+      },
+      {
+        "id_user": 2,
+        "id_speciality": 2,
+        "id_role": 2,
+        "name": "María",
+        "gender": "FEMENINO",
+        "last_name": "Gómez",
+        "email": "maria.gomez@gmail.com",
+        "email_verified": 1,
+        "average_rating": 4.8,
+        "password": "hashed_password",
+        "avatar": "avatar2.png",
+        "banner": "banner2.png",
+        "aboutname": "Sobre María",
+        "phoneNumber": "987654321",
+        "token_password": null,
+        "password_token": null
+      },
+      {
+        "id_user": 3,
+        "id_speciality": 2,
+        "id_role": 1,
+        "name": "Juan Segundo",
+        "gender": "MASCULINO",
+        "last_name": "S",
+        "email": "u22201741@gmail.com",
+        "email_verified": 0,
+        "average_rating": 0,
+        "password": "hashed_password",
+        "avatar": null,
+        "banner": null,
+        "aboutname": null,
+        "phoneNumber": "123",
+        "token_password": null,
+        "password_token": null
+      }
+    ],
+    "trades": [
+      {
+        "id_trade": 1,
+        "memberOne_id": 1,
+        "memberOne_specialty": 1,
+        "memberOne_hasRated": 0,
+        "memberTwo_id": 2,
+        "memberTwo_specialty": 2,
+        "memberTwo_hasRated": 0,
+        "duration": 60,
+        "expiresAt": "2024-12-31T23:59:59Z",
+        "status": "PENDING",
+        "chatRoomId": 101
+      },
+      {
+        "id_trade": 2,
+        "memberOne_id": 1,
+        "memberOne_specialty": 1,
+        "memberOne_hasRated": 1,
+        "memberTwo_id": 3,
+        "memberTwo_specialty": 2,
+        "memberTwo_hasRated": 0,
+        "duration": 120,
+        "expiresAt": "2024-12-15T18:30:00Z",
+        "status": "ACCEPTED",
+        "chatRoomId": 102
+      }
+    ]
+  }
+  

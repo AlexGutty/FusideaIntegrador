@@ -1,46 +1,50 @@
 import { useState, useEffect } from 'react';
+import useAuthState from '../../hooks/useAuthState';
 
 const useTradeRequests = () => {
   const [tradeRequests, setTradeRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { user } = useAuthState();
 
   useEffect(() => {
-    fetchTradeRequests();
-  }, []);
-
-  const fetchTradeRequests = async () => {
-    try {
-      setLoading(true);
-      // Replace this with your actual API call
-      const response = await fetch('/api/trade-requests');
-      if (!response.ok) {
-        throw new Error('Failed to fetch trade requests');
+    const fetchTradeRequests = async () => {
+      try {
+        const response = await fetch(`http://localhost:3000/trades?memberTwo_id=${user.id_user}&status=PENDING`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch trade requests');
+        }
+        const data = await response.json();
+        setTradeRequests(data);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
       }
-      const data = await response.json();
-      setTradeRequests(data);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
 
-  const respondToTradeRequest = async (requestId, accept) => {
+    if (user) {
+      fetchTradeRequests();
+    }
+  }, [user]);
+
+  const respondToTradeRequest = async (tradeId, accept) => {
     try {
-      // Replace this with your actual API call
-      const response = await fetch(`/api/trade-requests/${requestId}`, {
+      const response = await fetch(`http://localhost:3000/trades/${tradeId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ status: accept ? 'ACCEPTED' : 'REJECTED' }),
+        body: JSON.stringify({
+          status: accept ? 'ACCEPTED' : 'FINISHED',
+        }),
       });
+
       if (!response.ok) {
         throw new Error('Failed to respond to trade request');
       }
-      // Refresh trade requests after responding
-      await fetchTradeRequests();
+
+      setTradeRequests(prevRequests => prevRequests.filter(request => request.id_trade !== tradeId));
     } catch (err) {
       setError(err.message);
     }

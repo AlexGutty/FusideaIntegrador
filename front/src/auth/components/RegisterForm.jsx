@@ -1,252 +1,218 @@
-import React from 'react';
-import useRegister from '../hooks/useRegister';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { registerUser } from '../../api/auth';
 
 const RegisterForm = () => {
-  const {
-    id_speciality,
-    id_role,
-    name,
-    last_name,
-    email,
-    gender,
-    phoneNumber,
-    aboutname,
-    password,
-    confirmPassword,
-    avatar,
-    banner,
-    successMessage,
-    errorMessage,
-    handleChange,
-    handleSubmit,
-  } = useRegister();
+  const [formData, setFormData] = useState({
+    name: '',
+    last_name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    gender: '',
+    id_speciality: '',
+    id_role: '',
+    phoneNumber: ''
+  });
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prevData => ({
+      ...prevData,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setIsLoading(true);
+
+    if (formData.password !== formData.confirmPassword) {
+      setError('Las contraseñas no coinciden');
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const { confirmPassword, ...userData } = formData;
+      await registerUser(userData);
+      navigate('/login');
+    } catch (err) {
+      setError(err.message || 'Error en el registro');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <img
-          className="mx-auto h-16 w-auto rounded"
-          src="/imgs/logo2.jpg"
-          alt="Your Company"
-        />
-        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-          Regístrate en la plataforma
-        </h2>
-      </div>
-
-      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form className="space-y-6" onSubmit={handleSubmit}>
-          <div>
-            <label htmlFor="id_speciality" className="block text-sm font-medium leading-6 text-gray-900">
-              Especialidad
-            </label>
-            <select
-              id="id_speciality"
-              name="id_speciality"
-              value={id_speciality}
-              onChange={handleChange}
-              required
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            >
-              <option value="">Selecciona una especialidad</option>
-              {/* Aquí deberías agregar las opciones de especialidades */}
-            </select>
-          </div>
-
-          <div>
-            <label htmlFor="id_role" className="block text-sm font-medium leading-6 text-gray-900">
-              Rol
-            </label>
-            <select
-              id="id_role"
-              name="id_role"
-              value={id_role}
-              onChange={handleChange}
-              required
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            >
-              <option value="">Selecciona un rol</option>
-              {/* Aquí deberías agregar las opciones de roles */}
-            </select>
-          </div>
-
-          <div>
-            <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900">
+    <div className="w-full max-w-lg">
+      <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <div className="mb-4 flex">
+          <div className="mr-2 w-1/2">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
               Nombre
             </label>
             <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="name"
+              type="text"
+              placeholder="Nombre"
               name="name"
-              type="text"
-              value={name}
+              value={formData.name}
               onChange={handleChange}
               required
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />
           </div>
-
-          <div>
-            <label htmlFor="last_name" className="block text-sm font-medium leading-6 text-gray-900">
-              Apellidos
+          <div className="ml-2 w-1/2">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="last_name">
+              Apellido
             </label>
             <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="last_name"
-              name="last_name"
               type="text"
-              value={last_name}
+              placeholder="Apellido"
+              name="last_name"
+              value={formData.last_name}
               onChange={handleChange}
               required
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />
           </div>
-
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
-              Correo Electrónico
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              value={email}
-              onChange={handleChange}
-              required
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="gender" className="block text-sm font-medium leading-6 text-gray-900">
-              Género
-            </label>
-            <select
-              id="gender"
-              name="gender"
-              value={gender}
-              onChange={handleChange}
-              required
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            >
-              <option value="">Selecciona un género</option>
-              <option value="MASCULINO">Masculino</option>
-              <option value="FEMENINO">Femenino</option>
-              <option value="OTRO">Otro</option>
-            </select>
-          </div>
-
-          <div>
-            <label htmlFor="phoneNumber" className="block text-sm font-medium leading-6 text-gray-900">
-              Número de Teléfono
-            </label>
-            <input
-              id="phoneNumber"
-              name="phoneNumber"
-              type="tel"
-              value={phoneNumber}
-              onChange={handleChange}
-              required
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="aboutname" className="block text-sm font-medium leading-6 text-gray-900">
-              Acerca de ti
-            </label>
-            <textarea
-              id="aboutname"
-              name="aboutname"
-              value={aboutname}
-              onChange={handleChange}
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+            Email
+          </label>
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="email"
+            type="email"
+            placeholder="Email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="mb-4 flex">
+          <div className="mr-2 w-1/2">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
               Contraseña
             </label>
             <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
               id="password"
-              name="password"
               type="password"
-              value={password}
+              placeholder="******************"
+              name="password"
+              value={formData.password}
               onChange={handleChange}
               required
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />
           </div>
-
-          <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium leading-6 text-gray-900">
+          <div className="ml-2 w-1/2">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="confirmPassword">
               Confirmar Contraseña
             </label>
             <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
               id="confirmPassword"
-              name="confirmPassword"
               type="password"
-              value={confirmPassword}
+              placeholder="******************"
+              name="confirmPassword"
+              value={formData.confirmPassword}
               onChange={handleChange}
               required
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />
           </div>
-
-          <div>
-            <label htmlFor="avatar" className="block text-sm font-medium leading-6 text-gray-900">
-              Avatar
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="gender">
+            Género
+          </label>
+          <select
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="gender"
+            name="gender"
+            value={formData.gender}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Seleccione un género</option>
+            <option value="MASCULINO">Masculino</option>
+            <option value="FEMENINO">Femenino</option>
+            <option value="OTRO">Otro</option>
+          </select>
+        </div>
+        <div className="mb-4 flex">
+          <div className="mr-2 w-1/2">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="id_speciality">
+              Especialidad
             </label>
             <input
-              id="avatar"
-              name="avatar"
-              type="file"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="id_speciality"
+              type="number"
+              placeholder="ID Especialidad"
+              name="id_speciality"
+              value={formData.id_speciality}
               onChange={handleChange}
-              accept="image/*"
-              className="block w-full text-sm text-gray-500
-                file:mr-4 file:py-2 file:px-4
-                file:rounded-full file:border-0
-                file:text-sm file:font-semibold
-                file:bg-indigo-50 file:text-indigo-700
-                hover:file:bg-indigo-100"
+              required
             />
           </div>
-
-          <div>
-            <label htmlFor="banner" className="block text-sm font-medium leading-6 text-gray-900">
-              Banner
+          <div className="ml-2 w-1/2">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="id_role">
+              Rol
             </label>
             <input
-              id="banner"
-              name="banner"
-              type="file"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="id_role"
+              type="number"
+              placeholder="ID Rol"
+              name="id_role"
+              value={formData.id_role}
               onChange={handleChange}
-              accept="image/*"
-              className="block w-full text-sm text-gray-500
-                file:mr-4 file:py-2 file:px-4
-                file:rounded-full file:border-0
-                file:text-sm file:font-semibold
-                file:bg-indigo-50 file:text-indigo-700
-                hover:file:bg-indigo-100"
+              required
             />
           </div>
-
-          {errorMessage && <div className="text-red-500 text-sm mt-1">{errorMessage}</div>}
-          {successMessage && <div className="text-green-500 text-sm mt-1">{successMessage}</div>}
-
-          <div>
-            <button
-              type="submit"
-              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >
-              Crear cuenta
-            </button>
-          </div>
-        </form>
-      </div>
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="phoneNumber">
+            Número de Teléfono
+          </label>
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="phoneNumber"
+            type="tel"
+            placeholder="Número de Teléfono"
+            name="phoneNumber"
+            value={formData.phoneNumber}
+            onChange={handleChange}
+          />
+        </div>
+        {error && <p className="text-red-500 text-xs italic mb-4">{error}</p>}
+        <div className="flex items-center justify-between">
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="submit"
+            disabled={isLoading}
+          >
+            {isLoading ? 'Registrando...' : 'Registrarse'}
+          </button>
+          <a className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="/login">
+            Iniciar Sesión
+          </a>
+        </div>
+      </form>
     </div>
   );
 };
 
 export default RegisterForm;
+
 
 

@@ -1,53 +1,36 @@
 import { useState, useEffect } from 'react';
+import useAuthState from '../../hooks/useAuthState';
 
 const useTrades = () => {
   const [trades, setTrades] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { user } = useAuthState();
 
   useEffect(() => {
-    fetchTrades();
-  }, []);
-
-  const fetchTrades = async () => {
-    try {
-      setLoading(true);
-      // Replace this with your actual API call
-      const response = await fetch('/api/trades');
-      if (!response.ok) {
-        throw new Error('Failed to fetch trades');
+    const fetchTrades = async () => {
+      try {
+        const response = await fetch(`http://localhost:3000/trades?memberOne_id=${user.id_user}&memberTwo_id=${user.id_user}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch trades');
+        }
+        const data = await response.json();
+        setTrades(data);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
       }
-      const data = await response.json();
-      setTrades(data);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
 
-  const updateTradeStatus = async (tradeId, newStatus) => {
-    try {
-      // Replace this with your actual API call
-      const response = await fetch(`/api/trades/${tradeId}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ status: newStatus }),
-      });
-      if (!response.ok) {
-        throw new Error('Failed to update trade status');
-      }
-      // Refresh trades after updating
-      await fetchTrades();
-    } catch (err) {
-      setError(err.message);
+    if (user) {
+      fetchTrades();
     }
-  };
+  }, [user]);
 
-  return { trades, loading, error, updateTradeStatus };
+  return { trades, loading, error };
 };
 
 export default useTrades;
+
 

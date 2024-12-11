@@ -4,12 +4,14 @@ import useTrades from '../hooks/useTrades';
 import useTradeRequests from '../hooks/useTradeRequests';
 import TradeCard from '../components/TradeCard';
 import TradeModal from '../components/TradeModal';
+import useAuthState from '../../hooks/useAuthState';
 
 const MyTrades = () => {
   const { trades, loading: tradesLoading, error: tradesError } = useTrades();
   const { tradeRequests, loading: requestsLoading, error: requestsError, respondToTradeRequest } = useTradeRequests();
   const [selectedTrade, setSelectedTrade] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { user } = useAuthState();
 
   const handleTradeClick = (trade) => {
     setSelectedTrade(trade);
@@ -42,7 +44,7 @@ const MyTrades = () => {
           {trades.filter(trade => trade.status !== 'PENDING').map(trade => (
             <TradeCard
               key={trade.id_trade}
-              trade={trade}
+              trade={{...trade, currentUserId: user.id_user}}
               onClick={() => handleTradeClick(trade)}
             />
           ))}
@@ -55,7 +57,7 @@ const MyTrades = () => {
           {tradeRequests.map(request => (
             <TradeCard
               key={request.id_trade}
-              trade={request}
+              trade={{...request, currentUserId: user.id_user}}
               onClick={() => handleTradeClick(request)}
               onAccept={() => handleAcceptRequest(request.id_trade)}
               onReject={() => handleRejectRequest(request.id_trade)}
@@ -74,6 +76,7 @@ const MyTrades = () => {
 };
 
 export default MyTrades;
+
 
 
 
