@@ -1,20 +1,11 @@
-import React from 'react';
-import useRegister from '../hooks/useRegister';
+import React from "react";
+import useRegister from "../hooks/useRegister"; // Asegúrate de que la ruta sea la correcta
 
 const RegisterForm = () => {
   const {
-    id_speciality,
-    id_role,
-    name,
-    last_name,
-    email,
-    gender,
-    phoneNumber,
-    aboutname,
-    password,
-    confirmPassword,
-    avatar,
-    banner,
+    formData,
+    specialities,
+    roles,
     successMessage,
     errorMessage,
     handleChange,
@@ -22,231 +13,157 @@ const RegisterForm = () => {
   } = useRegister();
 
   return (
-    <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <img
-          className="mx-auto h-16 w-auto rounded"
-          src="/imgs/logo2.jpg"
-          alt="Your Company"
-        />
-        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-          Regístrate en la plataforma
-        </h2>
-      </div>
+    <div className="max-w-lg mx-auto p-6 bg-white rounded-lg shadow-md">
+      <h2 className="text-2xl font-semibold text-center mb-6">Registro de Usuario</h2>
 
-      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form className="space-y-6" onSubmit={handleSubmit}>
-          <div>
-            <label htmlFor="id_speciality" className="block text-sm font-medium leading-6 text-gray-900">
-              Especialidad
-            </label>
-            <select
-              id="id_speciality"
-              name="id_speciality"
-              value={id_speciality}
-              onChange={handleChange}
-              required
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            >
-              <option value="">Selecciona una especialidad</option>
-              {/* Aquí deberías agregar las opciones de especialidades */}
-            </select>
-          </div>
+      {successMessage && (
+        <div className="bg-green-500 text-white p-3 rounded-md mb-4">{successMessage}</div>
+      )}
+      {errorMessage && (
+        <div className="bg-red-500 text-white p-3 rounded-md mb-4">{errorMessage}</div>
+      )}
 
-          <div>
-            <label htmlFor="id_role" className="block text-sm font-medium leading-6 text-gray-900">
-              Rol
-            </label>
-            <select
-              id="id_role"
-              name="id_role"
-              value={id_role}
-              onChange={handleChange}
-              required
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            >
-              <option value="">Selecciona un rol</option>
-              {/* Aquí deberías agregar las opciones de roles */}
-            </select>
-          </div>
+      <form onSubmit={handleSubmit}>
+        {/* Nombre */}
+        <div className="mb-4">
+          <label htmlFor="name" className="block text-sm font-medium text-gray-700">Nombre:</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+          />
+        </div>
 
-          <div>
-            <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900">
-              Nombre
-            </label>
-            <input
-              id="name"
-              name="name"
-              type="text"
-              value={name}
-              onChange={handleChange}
-              required
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            />
-          </div>
+        {/* Apellido */}
+        <div className="mb-4">
+          <label htmlFor="last_name" className="block text-sm font-medium text-gray-700">Apellido:</label>
+          <input
+            type="text"
+            id="last_name"
+            name="last_name"
+            value={formData.last_name}
+            onChange={handleChange}
+            required
+            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+          />
+        </div>
 
-          <div>
-            <label htmlFor="last_name" className="block text-sm font-medium leading-6 text-gray-900">
-              Apellidos
-            </label>
-            <input
-              id="last_name"
-              name="last_name"
-              type="text"
-              value={last_name}
-              onChange={handleChange}
-              required
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            />
-          </div>
+        {/* Correo electrónico */}
+        <div className="mb-4">
+          <label htmlFor="email" className="block text-sm font-medium text-gray-700">Correo Electrónico:</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+          />
+        </div>
 
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
-              Correo Electrónico
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              value={email}
-              onChange={handleChange}
-              required
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            />
-          </div>
+        {/* Género */}
+        <div className="mb-4">
+          <label htmlFor="gender" className="block text-sm font-medium text-gray-700">Género:</label>
+          <select
+            id="gender"
+            name="gender"
+            value={formData.gender}
+            onChange={handleChange}
+            required
+            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+          >
+            <option value="">Selecciona el género</option>
+            <option value="male">Masculino</option>
+            <option value="female">Femenino</option>
+            <option value="other">Otro</option>
+          </select>
+        </div>
 
-          <div>
-            <label htmlFor="gender" className="block text-sm font-medium leading-6 text-gray-900">
-              Género
-            </label>
-            <select
-              id="gender"
-              name="gender"
-              value={gender}
-              onChange={handleChange}
-              required
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            >
-              <option value="">Selecciona un género</option>
-              <option value="MASCULINO">Masculino</option>
-              <option value="FEMENINO">Femenino</option>
-              <option value="OTRO">Otro</option>
-            </select>
-          </div>
+        {/* Especialidad */}
+        <div className="mb-4">
+          <label htmlFor="id_speciality" className="block text-sm font-medium text-gray-700">Especialidad:</label>
+          <select
+            id="id_speciality"
+            name="id_speciality"
+            value={formData.id_speciality}
+            onChange={handleChange}
+            required
+            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+          >
+            <option value="">Selecciona una especialidad</option>
+            {specialities.map((speciality) => (
+              <option key={speciality.id || speciality.name} value={speciality.id}>
+                {speciality.name}
+              </option>
+            ))}
+          </select>
+        </div>
 
-          <div>
-            <label htmlFor="phoneNumber" className="block text-sm font-medium leading-6 text-gray-900">
-              Número de Teléfono
-            </label>
-            <input
-              id="phoneNumber"
-              name="phoneNumber"
-              type="tel"
-              value={phoneNumber}
-              onChange={handleChange}
-              required
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            />
-          </div>
+        {/* Rol */}
+        <div className="mb-4">
+          <label htmlFor="id_role" className="block text-sm font-medium text-gray-700">Rol:</label>
+          <select
+            id="id_role"
+            name="id_role"
+            value={formData.id_role}
+            onChange={handleChange}
+            required
+            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+          >
+            <option value="">Selecciona un rol</option>
+            {roles.map((role) => (
+              <option key={role.id || role.name} value={role.id}>
+                {role.name}
+              </option>
+            ))}
+          </select>
+        </div>
 
-          <div>
-            <label htmlFor="aboutname" className="block text-sm font-medium leading-6 text-gray-900">
-              Acerca de ti
-            </label>
-            <textarea
-              id="aboutname"
-              name="aboutname"
-              value={aboutname}
-              onChange={handleChange}
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            />
-          </div>
+        {/* Contraseña */}
+        <div className="mb-4">
+          <label htmlFor="password" className="block text-sm font-medium text-gray-700">Contraseña:</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+          />
+        </div>
 
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
-              Contraseña
-            </label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              value={password}
-              onChange={handleChange}
-              required
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            />
-          </div>
+        {/* Confirmar Contraseña */}
+        <div className="mb-4">
+          <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">Confirmar Contraseña:</label>
+          <input
+            type="password"
+            id="confirmPassword"
+            name="confirmPassword"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            required
+            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+          />
+        </div>
 
-          <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium leading-6 text-gray-900">
-              Confirmar Contraseña
-            </label>
-            <input
-              id="confirmPassword"
-              name="confirmPassword"
-              type="password"
-              value={confirmPassword}
-              onChange={handleChange}
-              required
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="avatar" className="block text-sm font-medium leading-6 text-gray-900">
-              Avatar
-            </label>
-            <input
-              id="avatar"
-              name="avatar"
-              type="file"
-              onChange={handleChange}
-              accept="image/*"
-              className="block w-full text-sm text-gray-500
-                file:mr-4 file:py-2 file:px-4
-                file:rounded-full file:border-0
-                file:text-sm file:font-semibold
-                file:bg-indigo-50 file:text-indigo-700
-                hover:file:bg-indigo-100"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="banner" className="block text-sm font-medium leading-6 text-gray-900">
-              Banner
-            </label>
-            <input
-              id="banner"
-              name="banner"
-              type="file"
-              onChange={handleChange}
-              accept="image/*"
-              className="block w-full text-sm text-gray-500
-                file:mr-4 file:py-2 file:px-4
-                file:rounded-full file:border-0
-                file:text-sm file:font-semibold
-                file:bg-indigo-50 file:text-indigo-700
-                hover:file:bg-indigo-100"
-            />
-          </div>
-
-          {errorMessage && <div className="text-red-500 text-sm mt-1">{errorMessage}</div>}
-          {successMessage && <div className="text-green-500 text-sm mt-1">{successMessage}</div>}
-
-          <div>
-            <button
-              type="submit"
-              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >
-              Crear cuenta
-            </button>
-          </div>
-        </form>
-      </div>
+        {/* Botón de Enviar */}
+        <div className="mb-4">
+          <button
+            type="submit"
+            className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+          >
+            Registrar
+          </button>
+        </div>
+      </form>
     </div>
   );
 };
 
 export default RegisterForm;
-
-

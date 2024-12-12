@@ -12,14 +12,16 @@ export const AuthProvider = ({ children }) => {
   const login = (userData) => {
     setIsAuthenticated(true);
     setUser(userData);
-    // Puedes guardar el token en localStorage o cookies si lo necesitas
+    // Guardar el usuario en localStorage
+    localStorage.setItem('user', JSON.stringify(userData));
   };
 
   // Función para cerrar sesión
   const logout = () => {
     setIsAuthenticated(false);
     setUser(null);
-    // Limpia el token o cualquier otra información en almacenamiento local
+    // Eliminar usuario de localStorage
+    localStorage.removeItem('user');
   };
 
   // Verificar si el usuario tiene una sesión activa al cargar la app
@@ -38,4 +40,3 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
-

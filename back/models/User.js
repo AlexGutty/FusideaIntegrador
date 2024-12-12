@@ -1,6 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../utils/db');
 const Role = require('./Role');
+const Specialty = require('./Specialty'); // Importar el modelo Specialty
 
 const User = sequelize.define('User', {
   id_user: {
@@ -11,6 +12,10 @@ const User = sequelize.define('User', {
   id_speciality: {
     type: DataTypes.INTEGER,
     allowNull: true,
+    references: {
+      model: Specialty, // Referencia al modelo Specialty
+      key: 'id_speciality',
+    },
   },
   id_role: {
     type: DataTypes.INTEGER,
@@ -74,7 +79,10 @@ const User = sequelize.define('User', {
   timestamps: false,
 });
 
+// Relaciones
 User.belongsTo(Role, { foreignKey: 'id_role', as: 'Role' });
+User.belongsTo(Specialty, { foreignKey: 'id_speciality', as: 'Specialty' }); // Relación con Specialty
 
 module.exports = User;
+
 

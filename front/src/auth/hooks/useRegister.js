@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const useRegister = () => {
   const [formData, setFormData] = useState({
@@ -15,72 +15,116 @@ const useRegister = () => {
     avatar: null,
     banner: null,
   });
+
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [specialities, setSpecialities] = useState([]);
+  const [roles, setRoles] = useState([]);
 
-  const handleChange = (e) => {
-    const { name, value, type, files } = e.target;
-    setFormData(prevData => ({
-      ...prevData,
-      [name]: type === 'file' ? files[0] : value
-    }));
-  };
+  // Cargar especialidades y roles al montar el hook
+  useEffect(() => {
+    const fetchSpecialitiesAndRoles = async () => {
+      try {
+        const [specialitiesRes, rolesRes] = await Promise.all([
+          fetch('http://localhost:3000/api/specialties'),
+          fetch('http://localhost:3000/api/roles'),
+        ]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setSuccessMessage('');
-    setErrorMessage('');
+        if (!specialitiesRes.ok || !rolesRes.ok) {
+          throw new Error('Error al cargar especialidades o roles');
+        }
 
-    if (formData.password !== formData.confirmPassword) {
-      setErrorMessage('Las contraseñas no coinciden');
-      return;
+        const [specialitiesData, rolesData] = await Promise.all([
+          specialitiesRes.json(),
+          rolesRes.json(),
+        ]);
+
+        setSpecialities(specialitiesData);
+        setRoles(rolesData);
+      } catch (error) {
+        console.error('Error al cargar especialidades y roles:', error);
+        setErrorMessage('No se pudieron cargar las especialidades y roles.');
+      }
+    };
+
+    fetchSpecialitiesAndRoles();
+  }, []);
+
+  // Función de validación de formulario
+  const validateForm = () => {
+    const { id_speciality, id_role, name, last_name, email, gender, phoneNumber, password, confirmPassword } = formData;
+
+    if (!id_speciality || !id_role || !name || !last_name || !email || !gender || !phoneNumber || !password || !confirmPassword) {
+      setErrorMessage('Por favor, complete todos los campos.');
+      return false;
     }
 
-    try {
-      const formDataToSend = new FormData();
-      for (const key in formData) {
-        if (key !== 'confirmPassword') {
-          formDataToSend.append(key, formData[key]);
-        }
-      }
+    if (password !== confirmPassword) {
+      setErrorMessage('Las contraseñas no coinciden.');
+      return false;
+    }
 
-      const response = await fetch('/api/register', {
+    return true;
+  };
+
+  // Función para manejar el envío del formulario
+  const handleSubmit = async () => {
+    if (!validateForm()) return; // Validación antes de enviar
+
+    try {
+      const response = await fetch('http://localhost:3000/api/register', {
         method: 'POST',
-        body: formDataToSend,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
       });
 
       if (!response.ok) {
-        throw new Error('Registration failed');
+        throw new Error('Error al registrar los datos.');
       }
 
-      setSuccessMessage('Registro exitoso. Por favor, inicia sesión.');
-    } catch (err) {
-      setErrorMessage('No se pudo completar el registro. Por favor, inténtalo de nuevo.');
-      console.error('Registration error:', err);
+      const data = await response.json();
+      setSuccessMessage('Registro exitoso.');
+      setFormData({
+        id_speciality: '',
+        id_role: '',
+        name: '',
+        last_name: '',
+        email: '',
+        gender: '',
+        phoneNumber: '',
+        aboutname: '',
+        password: '',
+        confirmPassword: '',
+        avatar: null,
+        banner: null,
+      }); // Limpiar el formulario
+
+    } catch (error) {
+      setErrorMessage('Hubo un error al registrar los datos.');
+      console.error('Error:', error);
     }
   };
 
+  // Función para manejar los cambios en los inputs
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prevData => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
   return {
-    ...formData,
-    setIdSpeciality: (value) => handleChange({ target: { name: 'id_speciality', value } }),
-    setIdRole: (value) => handleChange({ target: { name: 'id_role', value } }),
-    setName: (value) => handleChange({ target: { name: 'name', value } }),
-    setLastName: (value) => handleChange({ target: { name: 'last_name', value } }),
-    setEmail: (value) => handleChange({ target: { name: 'email', value } }),
-    setGender: (value) => handleChange({ target: { name: 'gender', value } }),
-    setPhoneNumber: (value) => handleChange({ target: { name: 'phoneNumber', value } }),
-    setAboutname: (value) => handleChange({ target: { name: 'aboutname', value } }),
-    setPassword: (value) => handleChange({ target: { name: 'password', value } }),
-    setConfirmPassword: (value) => handleChange({ target: { name: 'confirmPassword', value } }),
-    setAvatar: (file) => handleChange({ target: { name: 'avatar', type: 'file', files: [file] } }),
-    setBanner: (file) => handleChange({ target: { name: 'banner', type: 'file', files: [file] } }),
-    successMessage,
-    errorMessage,
+    formData,
     handleChange,
     handleSubmit,
+    successMessage,
+    errorMessage,
+    specialities,
+    roles,
   };
 };
 
 export default useRegister;
-
-

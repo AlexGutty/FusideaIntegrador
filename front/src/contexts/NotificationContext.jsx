@@ -15,7 +15,7 @@ export const NotificationProvider = ({ children }) => {
     ]);
   };
 
-  // Marcar notificaciones como leídas
+  // Marcar una notificación como leída
   const markAsRead = (id) => {
     setNotifications((prev) =>
       prev.map((notification) =>
