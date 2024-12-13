@@ -1,27 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Importamos useNavigate
 import useLoginForm from '../hooks/useLoginForm';
 
 const LoginForm = () => {
   const { login, error, isLoading } = useLoginForm();
   const navigate = useNavigate(); // Inicializamos useNavigate para redirigir al usuario
+  const [localError, setLocalError] = useState(''); // Para manejar errores locales
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     const email = e.target.email.value.trim();
     const password = e.target.password.value.trim();
 
-    console.log('Datos enviados:', { email, password }); // Verifica los datos antes de enviarlos
+    if (!email || !password) {
+      setLocalError('Por favor, llena todos los campos.');
+      return;
+    }
 
-    login({ email, password })
-      .then(() => {
-        // Si el login es exitoso, redirigimos al usuario a /home
-        navigate('/home');
-      })
-      .catch((err) => {
-        // Maneja cualquier error aquí si es necesario
-        console.error("Error al iniciar sesión:", err);
-      });
+    try {
+      setLocalError('');
+      console.log('Datos enviados:', { email, password }); // Verifica los datos antes de enviarlos
+      await login({ email, password });
+
+      // Si el login es exitoso, redirigimos al usuario a /home
+      navigate('/home');
+    } catch (err) {
+      console.error('Error al iniciar sesión:', err);
+    }
   };
 
   return (
@@ -89,14 +95,23 @@ const LoginForm = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className={`flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm ${isLoading ? 'bg-gray-500' : 'bg-indigo-600 hover:bg-indigo-500'} focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
+              className={`flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm ${
+                isLoading
+                  ? 'bg-gray-500 cursor-not-allowed'
+                  : 'bg-indigo-600 hover:bg-indigo-500'
+              } focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
             >
               {isLoading ? 'Cargando...' : 'Iniciar sesión'}
             </button>
           </div>
         </form>
 
-        {error && <p className="mt-2 text-center text-sm text-red-500">{error}</p>}
+        {localError && (
+          <p className="mt-2 text-center text-sm text-red-500">{localError}</p>
+        )}
+        {error && (
+          <p className="mt-2 text-center text-sm text-red-500">{error}</p>
+        )}
 
         <p className="mt-10 text-center text-sm text-gray-500">
           ¿No eres miembro?{' '}
