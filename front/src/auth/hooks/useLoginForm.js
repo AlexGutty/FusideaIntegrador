@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import api from '../../api/axios';
 
-const useLoginForm = () => {
+const useLogin = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -10,11 +10,12 @@ const useLoginForm = () => {
     setError(null);
 
     try {
-      console.log('Datos enviados al backend:', credentials); // Verifica los datos enviados
-      const { data } = await api.post('/auth/login', credentials); // Envío de solicitud
-      console.log('Respuesta del backend:', data); // Verifica la respuesta
+      const response = await api.post('/auth/login', credentials); // Envía credenciales al backend
+      console.log('Usuario autenticado:', response.data);
+      return response.data;
     } catch (err) {
       setError(err.response?.data?.error || 'Error al iniciar sesión');
+      throw err;
     } finally {
       setIsLoading(false);
     }
@@ -23,4 +24,4 @@ const useLoginForm = () => {
   return { login, error, isLoading };
 };
 
-export default useLoginForm;
+export default useLogin;
