@@ -1,48 +1,38 @@
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const useAuthState = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null); // Información del usuario
+  const [loading, setLoading] = useState(true); // Estado de carga
+  const [isAuthenticated, setIsAuthenticated] = useState(false); // Estado de autenticación
 
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem('user'));
+    const checkAuth = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (token) {
+          const { data } = await axios.get('/api/auth/me', {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          setUser(data); // Guarda datos del usuario
+          setIsAuthenticated(true);
+        } else {
+          setIsAuthenticated(false);
+        }
+      } catch (error) {
+        console.error('Error al verificar autenticación:', error.response?.data || error.message);
+        setUser(null);
+        setIsAuthenticated(false);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    if (storedUser) {
-      setIsAuthenticated(true);
-      setUser(storedUser);
-    } else {
-      setIsAuthenticated(false);
-      setUser(null);
-    }
+    checkAuth();
   }, []);
 
-  const login = (userData) => {
-    localStorage.setItem('user', JSON.stringify(userData));
-    setUser(userData);
-    setIsAuthenticated(true);
-  };
-
-  const logout = () => {
-    localStorage.removeItem('user');
-    setUser(null);
-    setIsAuthenticated(false);
-  };
-
-  const updateUserAvatar = (newAvatarUrl) => {
-    const updatedUser = { ...user, avatar: newAvatarUrl };
-    localStorage.setItem('user', JSON.stringify(updatedUser));
-    setUser(updatedUser);
-  };
-
-  return {
-    isAuthenticated,
-    user,
-    login,
-    logout,
-    updateUserAvatar
-  };
+  return { user, isAuthenticated, loading };
 };
 
 export default useAuthState;
-
 
