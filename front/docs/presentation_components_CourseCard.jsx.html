@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: presentation/components/CourseCard.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: presentation/components/CourseCard.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react';
+import { motion } from 'framer-motion';
+import { AcademicCapIcon, BookOpenIcon } from '@heroicons/react/24/outline';
+
+/**
+ * Componente CourseCard.
+ * Este componente muestra la tarjeta de un curso, incluyendo su título, descripción, categoría.
+ * 
+ * @param {Object} course - Objeto que contiene la información del curso (título, descripción, categoría, nivel).
+ * @param {Function} onClick - Función que se ejecuta al hacer clic en la tarjeta del curso.
+ * @returns {JSX.Element} - Una tarjeta que representa un curso con animaciones de interacción.
+ */
+
+const CourseCard = ({ course, onClick }) => {
+  return (
+    &lt;motion.div
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      className="bg-white rounded-lg shadow-lg overflow-hidden cursor-pointer"
+      onClick={onClick}
+    >
+      &lt;div className="p-6">
+        &lt;h3 className="text-xl font-semibold text-[#4c9141] mb-2">{course.title}&lt;/h3>
+        &lt;p className="text-gray-600 mb-4">{course.description}&lt;/p>
+        &lt;div className="flex items-center justify-between text-sm text-gray-500">
+          &lt;div className="flex items-center">
+            &lt;BookOpenIcon className="h-5 w-5 mr-1 text-[#4c9141]" />
+            &lt;span>{course.category}&lt;/span>
+          &lt;/div>
+          &lt;div className="flex items-center">
+            &lt;AcademicCapIcon className="h-5 w-5 mr-1 text-[#4c9141]" />
+            &lt;span>{course.level}&lt;/span>
+          &lt;/div>
+        &lt;/div>
+      &lt;/div>
+    &lt;/motion.div>
+  );
+};
+
+export default CourseCard;
+
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AboutUs">AboutUs</a></li><li><a href="global.html#AboutUsPage">AboutUsPage</a></li><li><a href="global.html#AccordionItem">AccordionItem</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#AvatarProfile">AvatarProfile</a></li><li><a href="global.html#Banner">Banner</a></li><li><a href="global.html#BannerProfile">BannerProfile</a></li><li><a href="global.html#CallToAction">CallToAction</a></li><li><a href="global.html#CategoriesCarousel">CategoriesCarousel</a></li><li><a href="global.html#CertificationsForm">CertificationsForm</a></li><li><a href="global.html#ChatBubble">ChatBubble</a></li><li><a href="global.html#CollaborativeProjectsForm">CollaborativeProjectsForm</a></li><li><a href="global.html#CourseCard">CourseCard</a></li><li><a href="global.html#CourseModal">CourseModal</a></li><li><a href="global.html#Footer">Footer</a></li><li><a href="global.html#FriendList">FriendList</a></li><li><a href="global.html#FriendshipManager">FriendshipManager</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#HeroSection">HeroSection</a></li><li><a href="global.html#HomePublicPage">HomePublicPage</a></li><li><a href="global.html#Layout">Layout</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#PasswordRecovery">PasswordRecovery</a></li><li><a href="global.html#PasswordRecoveryForm">PasswordRecoveryForm</a></li><li><a href="global.html#PasswordReset">PasswordReset</a></li><li><a href="global.html#PasswordResetForm">PasswordResetForm</a></li><li><a href="global.html#PendingRequests">PendingRequests</a></li><li><a href="global.html#ProfileFormProfile">ProfileFormProfile</a></li><li><a href="global.html#ProfileInfo">ProfileInfo</a></li><li><a href="global.html#RatingModal">RatingModal</a></li><li><a href="global.html#Register">Register</a></li><li><a href="global.html#RegisterForm">RegisterForm</a></li><li><a href="global.html#SectionItem">SectionItem</a></li><li><a href="global.html#SuccessStories">SuccessStories</a></li><li><a href="global.html#SuccessStoriesPage">SuccessStoriesPage</a></li><li><a href="global.html#TemplateCard">TemplateCard</a></li><li><a href="global.html#TestimonialsCarousel">TestimonialsCarousel</a></li><li><a href="global.html#Trades">Trades</a></li><li><a href="global.html#TradesPage">TradesPage</a></li><li><a href="global.html#UserCard">UserCard</a></li><li><a href="global.html#UserDirectory">UserDirectory</a></li><li><a href="global.html#UserList">UserList</a></li><li><a href="global.html#UserProfile">UserProfile</a></li><li><a href="global.html#UserProfilePage">UserProfilePage</a></li><li><a href="global.html#UserProfileProfile">UserProfileProfile</a></li><li><a href="global.html#categories">categories</a></li><li><a href="global.html#features">features</a></li><li><a href="global.html#getChatRooms-Recuperatodaslassalasdechatdisponibles.">getChatRooms - Recupera todas las salas de chat disponibles.</a></li><li><a href="global.html#mockUsers">mockUsers</a></li><li><a href="global.html#root">root</a></li><li><a href="global.html#templatesData">templatesData</a></li><li><a href="global.html#updateBanner-Actualizaelbannerdeunusuarioconunarchivodeimagen.">updateBanner - Actualiza el banner de un usuario con un archivo de imagen.</a></li><li><a href="global.html#useAuthState">useAuthState</a></li><li><a href="global.html#useCategories">useCategories</a></li><li><a href="global.html#useChat">useChat</a></li><li><a href="global.html#useCollaboration">useCollaboration</a></li><li><a href="global.html#useForm">useForm</a></li><li><a href="global.html#useFriendships">useFriendships</a></li><li><a href="global.html#useHeroSection">useHeroSection</a></li><li><a href="global.html#useInView">useInView</a></li><li><a href="global.html#useMenu">useMenu</a></li><li><a href="global.html#usePasswordRecovery">usePasswordRecovery</a></li><li><a href="global.html#usePasswordReset">usePasswordReset</a></li><li><a href="global.html#useRating">useRating</a></li><li><a href="global.html#useRegister">useRegister</a></li><li><a href="global.html#useTestimonials">useTestimonials</a></li><li><a href="global.html#useUser">useUser</a></li><li><a href="global.html#useUsers">useUsers</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Fri Dec 13 2024 11:36:54 GMT-0500 (hora estándar de Perú)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

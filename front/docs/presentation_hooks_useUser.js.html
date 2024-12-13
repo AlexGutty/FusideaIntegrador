@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: presentation/hooks/useUser.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: presentation/hooks/useUser.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { useQuery, useMutation, useQueryClient } from 'react-query';
+
+/**
+ * Hook personalizado `useUser`.
+ * Este hook maneja la obtención y actualización de datos de usuario utilizando `react-query` y un servicio local 
+ * (simulado con `localStorage`).
+ * Permite interactuar con el perfil del usuario, incluyendo la actualización del perfil, avatar, banner, 
+ * certificaciones y proyectos colaborativos.
+ *
+ * @param {string|number} userId - ID del usuario para obtener y actualizar los datos.
+ * 
+ * @returns {Object} - Un objeto con los siguientes valores y funciones:
+ *   @returns {Object|null} user - Datos del usuario (si se encuentran disponibles), de lo contrario `null`.
+ *   @returns {boolean} isLoading - Indicador de carga (true cuando los datos se están obteniendo).
+ *   @returns {string|null} error - Mensaje de error si ocurrió algún problema al obtener los datos del usuario.
+ *   @returns {Function} updateUser - Función para actualizar los datos generales del perfil del usuario.
+ *   @returns {Function} updateAvatar - Función para actualizar el avatar del usuario.
+ *   @returns {Function} updateBanner - Función para actualizar el banner del usuario.
+ *   @returns {Function} addCertification - Función para añadir una nueva certificación al perfil del usuario.
+ *   @returns {Function} addCollaborativeProject - Función para añadir un nuevo proyecto colaborativo al perfil del usuario.
+ */
+
+export const useUser = (userId) => {
+  const queryClient = useQueryClient();
+
+  // Simulamos un servicio local
+  const localService = {
+    getUser: () => {
+      const storedUser = localStorage.getItem('user');
+      return Promise.resolve(storedUser ? JSON.parse(storedUser) : {
+        id: 1,
+        name: 'John',
+        last_name: 'Doe',
+        email: 'john.doe@example.com',
+        id_speciality: 'Developer',
+        id_role: 'Senior',
+        gender: 'MASCULINO',
+        phoneNumber: '123-456-7890',
+        aboutname: 'Passionate about coding and technology.',
+        email_verified: true,
+        average_rating: 4.5,
+        avatar: '/placeholder.svg?height=100&amp;width=100',
+        banner: '/placeholder.svg?height=200&amp;width=800',
+        certifications: [],
+        collaborativeProjects: []
+      });
+    },
+    updateUser: (data) => {
+      localStorage.setItem('user', JSON.stringify(data));
+      return Promise.resolve(data);
+    },
+    updateAvatar: (file) => {
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      const updatedUser = { ...user, avatar: URL.createObjectURL(file) };
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+      return Promise.resolve(updatedUser);
+    },
+    updateBanner: (file) => {
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      const updatedUser = { ...user, banner: URL.createObjectURL(file) };
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+      return Promise.resolve(updatedUser);
+    },
+    addCertification: (certification) => {
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      const updatedUser = {
+        ...user,
+        certifications: [...(user.certifications || []), certification]
+      };
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+      return Promise.resolve(updatedUser);
+    },
+    addCollaborativeProject: (project) => {
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      const updatedUser = {
+        ...user,
+        collaborativeProjects: [...(user.collaborativeProjects || []), project]
+      };
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+      return Promise.resolve(updatedUser);
+    }
+  };
+
+  // Query principal para obtener datos del usuario
+  const { data: user, isLoading, error } = useQuery(
+    ['user', userId],
+    () => localService.getUser(userId)
+  );
+
+  // Mutation para actualizar el perfil del usuario
+  const updateUser = useMutation(
+    (updateData) => localService.updateUser({ ...user, ...updateData }),
+    {
+      onSuccess: (updatedUser) => {
+        queryClient.setQueryData(['user', userId], updatedUser);
+      },
+    }
+  );
+
+  // Mutation para actualizar el avatar
+  const updateAvatar = useMutation(
+    (file) => localService.updateAvatar(file),
+    {
+      onSuccess: (updatedUser) => {
+        queryClient.setQueryData(['user', userId], updatedUser);
+      },
+    }
+  );
+
+  // Mutation para actualizar el banner
+  const updateBanner = useMutation(
+    (file) => localService.updateBanner(file),
+    {
+      onSuccess: (updatedUser) => {
+        queryClient.setQueryData(['user', userId], updatedUser);
+      },
+    }
+  );
+
+  // Mutation para añadir certificación
+  const addCertification = useMutation(
+    (certification) => localService.addCertification({ ...certification, id: Date.now() }),
+    {
+      onSuccess: (updatedUser) => {
+        queryClient.setQueryData(['user', userId], updatedUser);
+      },
+    }
+  );
+
+  // Mutation para añadir proyecto colaborativo
+  const addCollaborativeProject = useMutation(
+    (project) => localService.addCollaborativeProject({ ...project, id: Date.now() }),
+    {
+      onSuccess: (updatedUser) => {
+        queryClient.setQueryData(['user', userId], updatedUser);
+      },
+    }
+  );
+
+  return {
+    user,
+    isLoading,
+    error,
+    updateUser: updateUser.mutate,
+    updateAvatar: updateAvatar.mutate,
+    updateBanner: updateBanner.mutate,
+    addCertification: addCertification.mutate,
+    addCollaborativeProject: addCollaborativeProject.mutate
+  };
+};</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AboutUs">AboutUs</a></li><li><a href="global.html#AboutUsPage">AboutUsPage</a></li><li><a href="global.html#AccordionItem">AccordionItem</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#AvatarProfile">AvatarProfile</a></li><li><a href="global.html#Banner">Banner</a></li><li><a href="global.html#BannerProfile">BannerProfile</a></li><li><a href="global.html#CallToAction">CallToAction</a></li><li><a href="global.html#CategoriesCarousel">CategoriesCarousel</a></li><li><a href="global.html#CertificationsForm">CertificationsForm</a></li><li><a href="global.html#ChatBubble">ChatBubble</a></li><li><a href="global.html#CollaborativeProjectsForm">CollaborativeProjectsForm</a></li><li><a href="global.html#CourseCard">CourseCard</a></li><li><a href="global.html#CourseModal">CourseModal</a></li><li><a href="global.html#Footer">Footer</a></li><li><a href="global.html#FriendList">FriendList</a></li><li><a href="global.html#FriendshipManager">FriendshipManager</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#HeroSection">HeroSection</a></li><li><a href="global.html#HomePublicPage">HomePublicPage</a></li><li><a href="global.html#Layout">Layout</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#PasswordRecovery">PasswordRecovery</a></li><li><a href="global.html#PasswordRecoveryForm">PasswordRecoveryForm</a></li><li><a href="global.html#PasswordReset">PasswordReset</a></li><li><a href="global.html#PasswordResetForm">PasswordResetForm</a></li><li><a href="global.html#PendingRequests">PendingRequests</a></li><li><a href="global.html#ProfileFormProfile">ProfileFormProfile</a></li><li><a href="global.html#ProfileInfo">ProfileInfo</a></li><li><a href="global.html#RatingModal">RatingModal</a></li><li><a href="global.html#Register">Register</a></li><li><a href="global.html#RegisterForm">RegisterForm</a></li><li><a href="global.html#SectionItem">SectionItem</a></li><li><a href="global.html#SuccessStories">SuccessStories</a></li><li><a href="global.html#SuccessStoriesPage">SuccessStoriesPage</a></li><li><a href="global.html#TemplateCard">TemplateCard</a></li><li><a href="global.html#TestimonialsCarousel">TestimonialsCarousel</a></li><li><a href="global.html#Trades">Trades</a></li><li><a href="global.html#TradesPage">TradesPage</a></li><li><a href="global.html#UserCard">UserCard</a></li><li><a href="global.html#UserDirectory">UserDirectory</a></li><li><a href="global.html#UserList">UserList</a></li><li><a href="global.html#UserProfile">UserProfile</a></li><li><a href="global.html#UserProfilePage">UserProfilePage</a></li><li><a href="global.html#UserProfileProfile">UserProfileProfile</a></li><li><a href="global.html#categories">categories</a></li><li><a href="global.html#features">features</a></li><li><a href="global.html#getChatRooms-Recuperatodaslassalasdechatdisponibles.">getChatRooms - Recupera todas las salas de chat disponibles.</a></li><li><a href="global.html#mockUsers">mockUsers</a></li><li><a href="global.html#root">root</a></li><li><a href="global.html#templatesData">templatesData</a></li><li><a href="global.html#updateBanner-Actualizaelbannerdeunusuarioconunarchivodeimagen.">updateBanner - Actualiza el banner de un usuario con un archivo de imagen.</a></li><li><a href="global.html#useAuthState">useAuthState</a></li><li><a href="global.html#useCategories">useCategories</a></li><li><a href="global.html#useChat">useChat</a></li><li><a href="global.html#useCollaboration">useCollaboration</a></li><li><a href="global.html#useForm">useForm</a></li><li><a href="global.html#useFriendships">useFriendships</a></li><li><a href="global.html#useHeroSection">useHeroSection</a></li><li><a href="global.html#useInView">useInView</a></li><li><a href="global.html#useMenu">useMenu</a></li><li><a href="global.html#usePasswordRecovery">usePasswordRecovery</a></li><li><a href="global.html#usePasswordReset">usePasswordReset</a></li><li><a href="global.html#useRating">useRating</a></li><li><a href="global.html#useRegister">useRegister</a></li><li><a href="global.html#useTestimonials">useTestimonials</a></li><li><a href="global.html#useUser">useUser</a></li><li><a href="global.html#useUsers">useUsers</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Fri Dec 13 2024 11:36:54 GMT-0500 (hora estándar de Perú)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

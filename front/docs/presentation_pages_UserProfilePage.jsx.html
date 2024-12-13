@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: presentation/pages/UserProfilePage.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: presentation/pages/UserProfilePage.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useContext, useEffect } from 'react';
+import UserProfile from '../components/UserProfile';
+import { ProjectContext } from '../../contexts/ProjectContext';
+import { NotificationContext } from '../../contexts/NotificationContext';
+import '../../index.css';
+import '../../assets/styles/global.css';
+
+/**
+ * Componente `UserProfilePage` que muestra la información del perfil del usuario y su portafolio de proyectos.
+ * Permite agregar nuevos proyectos al portafolio o eliminar proyectos existentes. 
+ * Además, gestiona las notificaciones para informar al usuario sobre el estado de estas acciones.
+ * 
+ * Este componente hace uso de los siguientes Contextos:
+ * - `ProjectContext`: Gestiona la lista de proyectos del usuario, proporcionando funciones para agregar y eliminar proyectos.
+ * - `NotificationContext`: Permite agregar notificaciones al usuario sobre las acciones realizadas, como agregar o eliminar proyectos. 
+ * Los mensajes de notificación se generan utilizando el contexto `NotificationContext` para informar al usuario sobre el éxito 
+ * o la eliminación de un proyecto.
+ * 
+ * @returns {JSX.Element} - El componente que renderiza la página de perfil de usuario y su portafolio de proyectos.
+ */
+
+const UserProfilePage = () => {
+  const { projects, fetchProjects, addProject, removeProject } = useContext(ProjectContext);
+  const { addNotification } = useContext(NotificationContext);
+
+  useEffect(() => {
+    fetchProjects(); // Cargar proyectos al cargar la página
+  }, []);
+
+  const handleAddProject = () => {
+    const newProject = {
+      name: 'Nuevo Proyecto',
+      description: 'Descripción de prueba para un proyecto',
+    };
+    addProject(newProject);
+    addNotification('Proyecto agregado exitosamente', 'success');
+  };
+
+  const handleRemoveProject = (id) => {
+    removeProject(id);
+    addNotification('Proyecto eliminado', 'info');
+  };
+
+  return (
+    &lt;div className="min-h-screen flex flex-col">
+      &lt;main className="flex-grow bg-gray-50">
+        &lt;UserProfile />
+        &lt;section className="p-4">
+          &lt;h2 className="text-xl font-bold mb-4">Portafolio&lt;/h2>
+          &lt;ul className="space-y-4">
+            {projects.map((project) => (
+              &lt;li key={project.id} className="p-4 border rounded shadow-sm bg-white">
+                &lt;h3 className="font-semibold">{project.name}&lt;/h3>
+                &lt;p className="text-gray-600">{project.description}&lt;/p>
+                &lt;button
+                  onClick={() => handleRemoveProject(project.id)}
+                  className="mt-2 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-700"
+                >
+                  Eliminar
+                &lt;/button>
+              &lt;/li>
+            ))}
+          &lt;/ul>
+          &lt;button
+            onClick={handleAddProject}
+            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+          >
+            Agregar Proyecto
+          &lt;/button>
+        &lt;/section>
+      &lt;/main>
+    &lt;/div>
+  );
+};
+
+export default UserProfilePage;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AboutUs">AboutUs</a></li><li><a href="global.html#AboutUsPage">AboutUsPage</a></li><li><a href="global.html#AccordionItem">AccordionItem</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#AvatarProfile">AvatarProfile</a></li><li><a href="global.html#Banner">Banner</a></li><li><a href="global.html#BannerProfile">BannerProfile</a></li><li><a href="global.html#CallToAction">CallToAction</a></li><li><a href="global.html#CategoriesCarousel">CategoriesCarousel</a></li><li><a href="global.html#CertificationsForm">CertificationsForm</a></li><li><a href="global.html#ChatBubble">ChatBubble</a></li><li><a href="global.html#CollaborativeProjectsForm">CollaborativeProjectsForm</a></li><li><a href="global.html#CourseCard">CourseCard</a></li><li><a href="global.html#CourseModal">CourseModal</a></li><li><a href="global.html#Footer">Footer</a></li><li><a href="global.html#FriendList">FriendList</a></li><li><a href="global.html#FriendshipManager">FriendshipManager</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#HeroSection">HeroSection</a></li><li><a href="global.html#HomePublicPage">HomePublicPage</a></li><li><a href="global.html#Layout">Layout</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#PasswordRecovery">PasswordRecovery</a></li><li><a href="global.html#PasswordRecoveryForm">PasswordRecoveryForm</a></li><li><a href="global.html#PasswordReset">PasswordReset</a></li><li><a href="global.html#PasswordResetForm">PasswordResetForm</a></li><li><a href="global.html#PendingRequests">PendingRequests</a></li><li><a href="global.html#ProfileFormProfile">ProfileFormProfile</a></li><li><a href="global.html#ProfileInfo">ProfileInfo</a></li><li><a href="global.html#RatingModal">RatingModal</a></li><li><a href="global.html#Register">Register</a></li><li><a href="global.html#RegisterForm">RegisterForm</a></li><li><a href="global.html#SectionItem">SectionItem</a></li><li><a href="global.html#SuccessStories">SuccessStories</a></li><li><a href="global.html#SuccessStoriesPage">SuccessStoriesPage</a></li><li><a href="global.html#TemplateCard">TemplateCard</a></li><li><a href="global.html#TestimonialsCarousel">TestimonialsCarousel</a></li><li><a href="global.html#Trades">Trades</a></li><li><a href="global.html#TradesPage">TradesPage</a></li><li><a href="global.html#UserCard">UserCard</a></li><li><a href="global.html#UserDirectory">UserDirectory</a></li><li><a href="global.html#UserList">UserList</a></li><li><a href="global.html#UserProfile">UserProfile</a></li><li><a href="global.html#UserProfilePage">UserProfilePage</a></li><li><a href="global.html#UserProfileProfile">UserProfileProfile</a></li><li><a href="global.html#categories">categories</a></li><li><a href="global.html#features">features</a></li><li><a href="global.html#getChatRooms-Recuperatodaslassalasdechatdisponibles.">getChatRooms - Recupera todas las salas de chat disponibles.</a></li><li><a href="global.html#mockUsers">mockUsers</a></li><li><a href="global.html#root">root</a></li><li><a href="global.html#templatesData">templatesData</a></li><li><a href="global.html#updateBanner-Actualizaelbannerdeunusuarioconunarchivodeimagen.">updateBanner - Actualiza el banner de un usuario con un archivo de imagen.</a></li><li><a href="global.html#useAuthState">useAuthState</a></li><li><a href="global.html#useCategories">useCategories</a></li><li><a href="global.html#useChat">useChat</a></li><li><a href="global.html#useCollaboration">useCollaboration</a></li><li><a href="global.html#useForm">useForm</a></li><li><a href="global.html#useFriendships">useFriendships</a></li><li><a href="global.html#useHeroSection">useHeroSection</a></li><li><a href="global.html#useInView">useInView</a></li><li><a href="global.html#useMenu">useMenu</a></li><li><a href="global.html#usePasswordRecovery">usePasswordRecovery</a></li><li><a href="global.html#usePasswordReset">usePasswordReset</a></li><li><a href="global.html#useRating">useRating</a></li><li><a href="global.html#useRegister">useRegister</a></li><li><a href="global.html#useTestimonials">useTestimonials</a></li><li><a href="global.html#useUser">useUser</a></li><li><a href="global.html#useUsers">useUsers</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Fri Dec 13 2024 11:36:54 GMT-0500 (hora estándar de Perú)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

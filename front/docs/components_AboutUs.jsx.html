@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/AboutUs.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/AboutUs.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react';
+import { motion } from 'framer-motion';
+
+/**
+ * Componente que muestra información sobre la empresa y sus valores.
+ * 
+ * Renderiza un encabezado, una descripción general, una imagen del equipo y 
+ * una sección con los valores clave de la empresa, cada uno con su respectivo ícono y descripción.
+ * Además, incluye un llamado a la acción para unirse a la comunidad.
+ * 
+ * Utiliza animaciones con framer-motion para una transición suave de los elementos al aparecer en pantalla.
+ * 
+ * @returns {JSX.Element} - Renderiza el contenido sobre la empresa y sus valores.
+ */
+
+const AboutUs = () => {
+  const fadeIn = {
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.6 }
+  };
+
+  const values = [
+    {
+      title: "Innovación",
+      description: "Impulsamos la creatividad y las nuevas ideas para transformar el mundo del trabajo.",
+      icon: "../imgs/innovation.png"
+    },
+    {
+      title: "Colaboración",
+      description: "Creemos en la fuerza del trabajo en equipo para lograr grandes resultados.",
+      icon: "../imgs/collaboration.png"
+    },
+    {
+      title: "Impacto",
+      description: "Nuestra misión es crear un impacto positivo en la sociedad y en las industrias que tocamos.",
+      icon: "../imgs/impact.png"
+    }
+  ];
+
+  return (
+    &lt;main className="flex-1 bg-gradient-to-b from-[#e8f3e5] to-white">
+      &lt;div className="max-w-7xl mx-auto p-8">
+        &lt;motion.h1 
+          className="text-5xl font-bold text-[#4c9141] mb-8 text-center"
+          {...fadeIn}
+        >
+          Acerca de Nosotros
+        &lt;/motion.h1>
+        &lt;motion.p 
+          className="text-xl text-gray-700 leading-relaxed mb-12 max-w-3xl mx-auto text-center"
+          {...fadeIn}
+        >
+          En Fusidea, nos dedicamos a construir una comunidad sólida donde los profesionales de diversas disciplinas puedan colaborar en proyectos que realmente marquen la diferencia. Nuestra misión es impulsar el intercambio de conocimientos, fomentar la innovación y crear oportunidades reales para todos.
+        &lt;/motion.p>
+
+        &lt;motion.div 
+          className="relative mb-20"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6 }}
+        >
+          &lt;img
+            src="../imgs/about_us.jpg"
+            alt="Equipo de Fusidea colaborando"
+            className="rounded-lg shadow-2xl mx-auto max-w-full"
+          />
+          &lt;div className="absolute inset-0 bg-[#4c9141] opacity-20 rounded-lg">&lt;/div>
+        &lt;/motion.div>
+
+        &lt;motion.h2 
+          className="text-3xl font-semibold text-[#4c9141] mb-12 text-center"
+          {...fadeIn}
+        >
+          Nuestros Valores
+        &lt;/motion.h2>
+
+        &lt;div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {values.map((value, index) => (
+            &lt;motion.div
+              key={index}
+              className="flex flex-col items-center p-6 bg-white rounded-lg shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition duration-300"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.2 }}
+            >
+              &lt;div className="w-24 h-24 mb-4 bg-[#e8f3e5] rounded-full flex items-center justify-center">
+                &lt;img
+                  src={value.icon}
+                  alt={value.title}
+                  className="w-16 h-16 transition-transform duration-300 hover:scale-110"
+                />
+              &lt;/div>
+              &lt;h3 className="text-2xl font-semibold text-[#4c9141] mb-2">{value.title}&lt;/h3>
+              &lt;p className="text-gray-700 text-center">{value.description}&lt;/p>
+            &lt;/motion.div>
+          ))}
+        &lt;/div>
+
+        &lt;motion.div 
+          className="mt-20 text-center"
+          {...fadeIn}
+        >
+          &lt;h2 className="text-3xl font-semibold text-[#4c9141] mb-6">Únete a Nuestra Comunidad&lt;/h2>
+          &lt;p className="text-xl text-gray-700 mb-8">
+            Sé parte de una red global de innovadores y creadores. Juntos, podemos hacer la diferencia.
+          &lt;/p>
+          &lt;a 
+            href="/register" 
+            className="bg-[#4c9141] text-white py-3 px-8 rounded-full text-lg font-semibold hover:bg-[#3a6f32] transition duration-300 ease-in-out inline-block"
+          >
+            Comienza Ahora
+          &lt;/a>
+        &lt;/motion.div>
+      &lt;/div>
+    &lt;/main>
+  );
+};
+
+export default AboutUs;
+
+
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AboutUs">AboutUs</a></li><li><a href="global.html#AboutUsPage">AboutUsPage</a></li><li><a href="global.html#AccordionItem">AccordionItem</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#AvatarProfile">AvatarProfile</a></li><li><a href="global.html#Banner">Banner</a></li><li><a href="global.html#BannerProfile">BannerProfile</a></li><li><a href="global.html#CallToAction">CallToAction</a></li><li><a href="global.html#CategoriesCarousel">CategoriesCarousel</a></li><li><a href="global.html#CertificationsForm">CertificationsForm</a></li><li><a href="global.html#ChatBubble">ChatBubble</a></li><li><a href="global.html#CollaborativeProjectsForm">CollaborativeProjectsForm</a></li><li><a href="global.html#CourseCard">CourseCard</a></li><li><a href="global.html#CourseModal">CourseModal</a></li><li><a href="global.html#Footer">Footer</a></li><li><a href="global.html#FriendList">FriendList</a></li><li><a href="global.html#FriendshipManager">FriendshipManager</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#HeroSection">HeroSection</a></li><li><a href="global.html#HomePublicPage">HomePublicPage</a></li><li><a href="global.html#Layout">Layout</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#PasswordRecovery">PasswordRecovery</a></li><li><a href="global.html#PasswordRecoveryForm">PasswordRecoveryForm</a></li><li><a href="global.html#PasswordReset">PasswordReset</a></li><li><a href="global.html#PasswordResetForm">PasswordResetForm</a></li><li><a href="global.html#PendingRequests">PendingRequests</a></li><li><a href="global.html#ProfileFormProfile">ProfileFormProfile</a></li><li><a href="global.html#ProfileInfo">ProfileInfo</a></li><li><a href="global.html#RatingModal">RatingModal</a></li><li><a href="global.html#Register">Register</a></li><li><a href="global.html#RegisterForm">RegisterForm</a></li><li><a href="global.html#SectionItem">SectionItem</a></li><li><a href="global.html#SuccessStories">SuccessStories</a></li><li><a href="global.html#SuccessStoriesPage">SuccessStoriesPage</a></li><li><a href="global.html#TemplateCard">TemplateCard</a></li><li><a href="global.html#TestimonialsCarousel">TestimonialsCarousel</a></li><li><a href="global.html#Trades">Trades</a></li><li><a href="global.html#TradesPage">TradesPage</a></li><li><a href="global.html#UserCard">UserCard</a></li><li><a href="global.html#UserDirectory">UserDirectory</a></li><li><a href="global.html#UserList">UserList</a></li><li><a href="global.html#UserProfile">UserProfile</a></li><li><a href="global.html#UserProfilePage">UserProfilePage</a></li><li><a href="global.html#UserProfileProfile">UserProfileProfile</a></li><li><a href="global.html#categories">categories</a></li><li><a href="global.html#features">features</a></li><li><a href="global.html#getChatRooms-Recuperatodaslassalasdechatdisponibles.">getChatRooms - Recupera todas las salas de chat disponibles.</a></li><li><a href="global.html#mockUsers">mockUsers</a></li><li><a href="global.html#root">root</a></li><li><a href="global.html#templatesData">templatesData</a></li><li><a href="global.html#updateBanner-Actualizaelbannerdeunusuarioconunarchivodeimagen.">updateBanner - Actualiza el banner de un usuario con un archivo de imagen.</a></li><li><a href="global.html#useAuthState">useAuthState</a></li><li><a href="global.html#useCategories">useCategories</a></li><li><a href="global.html#useChat">useChat</a></li><li><a href="global.html#useCollaboration">useCollaboration</a></li><li><a href="global.html#useForm">useForm</a></li><li><a href="global.html#useFriendships">useFriendships</a></li><li><a href="global.html#useHeroSection">useHeroSection</a></li><li><a href="global.html#useInView">useInView</a></li><li><a href="global.html#useMenu">useMenu</a></li><li><a href="global.html#usePasswordRecovery">usePasswordRecovery</a></li><li><a href="global.html#usePasswordReset">usePasswordReset</a></li><li><a href="global.html#useRating">useRating</a></li><li><a href="global.html#useRegister">useRegister</a></li><li><a href="global.html#useTestimonials">useTestimonials</a></li><li><a href="global.html#useUser">useUser</a></li><li><a href="global.html#useUsers">useUsers</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Fri Dec 13 2024 11:36:54 GMT-0500 (hora estándar de Perú)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: presentation/components/ChatBubble.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: presentation/components/ChatBubble.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useRef, useEffect } from 'react';
+import { ChatBubbleLeftIcon, XMarkIcon } from '@heroicons/react/24/solid';
+import useChat from '../hooks/useChat';
+
+/**
+ * Componente ChatBubble.
+ * Este componente muestra una burbuja de chat flotante en la esquina inferior derecha de la página.
+ * Al hacer clic en la burbuja, se abre un panel de chat donde los usuarios pueden seleccionar una sala
+ * de chat y enviar mensajes. Los mensajes se muestran de forma dinámica, y el panel de chat se cierra
+ * cuando el usuario hace clic en el ícono de cierre.
+ * 
+ * @returns {JSX.Element} - Una burbuja de chat interactiva que permite a los usuarios enviar y recibir mensajes.
+ */
+
+const ChatBubble = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [inputMessage, setInputMessage] = useState('');
+  const [selectedChatRoom, setSelectedChatRoom] = useState(null);
+  const messagesEndRef = useRef(null);
+
+  const { messages, sendMessage, isLoading, error, chatRooms } = useChat(selectedChatRoom || 0);
+
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages]);
+
+  const handleSendMessage = (e) => {
+    e.preventDefault();
+    if (inputMessage.trim() &amp;&amp; selectedChatRoom) {
+      sendMessage(inputMessage);
+      setInputMessage('');
+    }
+  };
+
+  return (
+    &lt;div className="fixed bottom-4 right-4 z-50">
+      {isOpen ? (
+        &lt;div className="bg-white rounded-lg shadow-xl w-80 h-96 flex flex-col">
+          &lt;div className="bg-blue-600 p-4 rounded-t-lg flex justify-between items-center">
+            &lt;h3 className="text-white font-semibold">Chat&lt;/h3>
+            &lt;button 
+              onClick={() => setIsOpen(false)}
+              className="text-white hover:text-gray-200"
+            >
+              &lt;XMarkIcon className="w-6 h-6" />
+            &lt;/button>
+          &lt;/div>
+          &lt;div className="p-2">
+            &lt;select
+              value={selectedChatRoom || ''}
+              onChange={(e) => setSelectedChatRoom(Number(e.target.value))}
+              className="w-full p-2 border rounded"
+            >
+              &lt;option value="">Selecciona un Chat&lt;/option>
+              {chatRooms?.map((room) => (
+                &lt;option key={room.id} value={room.id}>
+                  {room.name}
+                &lt;/option>
+              ))}
+            &lt;/select>
+          &lt;/div>
+          &lt;div className="flex-1 p-4 overflow-y-auto">
+            {isLoading ? (
+              &lt;p>Cargando mensajes...&lt;/p>
+            ) : error ? (
+              &lt;p>Error al cargar mensajes&lt;/p>
+            ) : (
+              messages.map((msg) => (
+                &lt;div key={msg.id_messages} className="mb-2">
+                  &lt;strong>{msg.senderId === 1 ? 'Tú' : 'Otros'}:&lt;/strong> {msg.message}
+                &lt;/div>
+              ))
+            )}
+            &lt;div ref={messagesEndRef} />
+          &lt;/div>
+          &lt;form onSubmit={handleSendMessage} className="p-4 border-t">
+            &lt;input
+              type="text"
+              value={inputMessage}
+              onChange={(e) => setInputMessage(e.target.value)}
+              placeholder="Escribe un mensaje..."
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          &lt;/form>
+        &lt;/div>
+      ) : (
+        &lt;button
+          onClick={() => setIsOpen(true)}
+          className="bg-blue-600 p-3 rounded-full text-white shadow-lg hover:bg-blue-700 transition-colors"
+        >
+          &lt;ChatBubbleLeftIcon className="w-6 h-6" />
+        &lt;/button>
+      )}
+    &lt;/div>
+  );
+}
+
+export default ChatBubble;
+
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AboutUs">AboutUs</a></li><li><a href="global.html#AboutUsPage">AboutUsPage</a></li><li><a href="global.html#AccordionItem">AccordionItem</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#AvatarProfile">AvatarProfile</a></li><li><a href="global.html#Banner">Banner</a></li><li><a href="global.html#BannerProfile">BannerProfile</a></li><li><a href="global.html#CallToAction">CallToAction</a></li><li><a href="global.html#CategoriesCarousel">CategoriesCarousel</a></li><li><a href="global.html#CertificationsForm">CertificationsForm</a></li><li><a href="global.html#ChatBubble">ChatBubble</a></li><li><a href="global.html#CollaborativeProjectsForm">CollaborativeProjectsForm</a></li><li><a href="global.html#CourseCard">CourseCard</a></li><li><a href="global.html#CourseModal">CourseModal</a></li><li><a href="global.html#Footer">Footer</a></li><li><a href="global.html#FriendList">FriendList</a></li><li><a href="global.html#FriendshipManager">FriendshipManager</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#HeroSection">HeroSection</a></li><li><a href="global.html#HomePublicPage">HomePublicPage</a></li><li><a href="global.html#Layout">Layout</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#PasswordRecovery">PasswordRecovery</a></li><li><a href="global.html#PasswordRecoveryForm">PasswordRecoveryForm</a></li><li><a href="global.html#PasswordReset">PasswordReset</a></li><li><a href="global.html#PasswordResetForm">PasswordResetForm</a></li><li><a href="global.html#PendingRequests">PendingRequests</a></li><li><a href="global.html#ProfileFormProfile">ProfileFormProfile</a></li><li><a href="global.html#ProfileInfo">ProfileInfo</a></li><li><a href="global.html#RatingModal">RatingModal</a></li><li><a href="global.html#Register">Register</a></li><li><a href="global.html#RegisterForm">RegisterForm</a></li><li><a href="global.html#SectionItem">SectionItem</a></li><li><a href="global.html#SuccessStories">SuccessStories</a></li><li><a href="global.html#SuccessStoriesPage">SuccessStoriesPage</a></li><li><a href="global.html#TemplateCard">TemplateCard</a></li><li><a href="global.html#TestimonialsCarousel">TestimonialsCarousel</a></li><li><a href="global.html#Trades">Trades</a></li><li><a href="global.html#TradesPage">TradesPage</a></li><li><a href="global.html#UserCard">UserCard</a></li><li><a href="global.html#UserDirectory">UserDirectory</a></li><li><a href="global.html#UserList">UserList</a></li><li><a href="global.html#UserProfile">UserProfile</a></li><li><a href="global.html#UserProfilePage">UserProfilePage</a></li><li><a href="global.html#UserProfileProfile">UserProfileProfile</a></li><li><a href="global.html#categories">categories</a></li><li><a href="global.html#features">features</a></li><li><a href="global.html#getChatRooms-Recuperatodaslassalasdechatdisponibles.">getChatRooms - Recupera todas las salas de chat disponibles.</a></li><li><a href="global.html#mockUsers">mockUsers</a></li><li><a href="global.html#root">root</a></li><li><a href="global.html#templatesData">templatesData</a></li><li><a href="global.html#updateBanner-Actualizaelbannerdeunusuarioconunarchivodeimagen.">updateBanner - Actualiza el banner de un usuario con un archivo de imagen.</a></li><li><a href="global.html#useAuthState">useAuthState</a></li><li><a href="global.html#useCategories">useCategories</a></li><li><a href="global.html#useChat">useChat</a></li><li><a href="global.html#useCollaboration">useCollaboration</a></li><li><a href="global.html#useForm">useForm</a></li><li><a href="global.html#useFriendships">useFriendships</a></li><li><a href="global.html#useHeroSection">useHeroSection</a></li><li><a href="global.html#useInView">useInView</a></li><li><a href="global.html#useMenu">useMenu</a></li><li><a href="global.html#usePasswordRecovery">usePasswordRecovery</a></li><li><a href="global.html#usePasswordReset">usePasswordReset</a></li><li><a href="global.html#useRating">useRating</a></li><li><a href="global.html#useRegister">useRegister</a></li><li><a href="global.html#useTestimonials">useTestimonials</a></li><li><a href="global.html#useUser">useUser</a></li><li><a href="global.html#useUsers">useUsers</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Fri Dec 13 2024 11:36:54 GMT-0500 (hora estándar de Perú)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

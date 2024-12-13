@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: presentation/pages/UserProfileProfile.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: presentation/pages/UserProfileProfile.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState } from 'react';
+import { AvatarProfile } from '../components/AvatarProfile';
+import { BannerProfile } from '../components/BannerProfile';
+import { ProfileFormProfile } from '../components/ProfileFormProfile';
+import { CertificationsForm } from '../components/CertificationsForm';
+import { CollaborativeProjectsForm } from '../components/CollaborativeProjectsForm';
+import { useUser } from '../hooks/useUser';
+
+/**
+ * Componente `UserProfileProfile` que permite a un usuario ver y editar su perfil, incluyendo detalles personales, 
+ * certificaciones y proyectos colaborativos. 
+ * 
+ * Este componente realiza las siguientes acciones:
+ * - Permite al usuario editar su perfil, incluyendo nombre, especialidad, rol, etc. 
+ * - Permite al usuario agregar certificaciones y proyectos colaborativos.
+ * - Muestra información como el nombre del usuario, su correo electrónico y calificación promedio.
+ * - Permite al usuario actualizar su avatar y banner de perfil.
+ * Al cargar, el componente utiliza el hook `useUser` para obtener los datos del usuario con un ID fijo (en este caso, `1`), 
+ * y proporciona las funciones correspondientes para actualizar los datos y agregar nuevos elementos (certificaciones y proyectos).
+ * 
+ * @returns {JSX.Element} - El componente que renderiza la página de perfil del usuario con opciones de edición y actualización.
+ */
+
+const UserProfileProfile = () => {
+  const [isEditing, setIsEditing] = useState(false);
+  const { 
+    user, 
+    isLoading,
+    error,
+    updateUser, 
+    updateAvatar, 
+    updateBanner, 
+    addCertification, 
+    addCollaborativeProject 
+  } = useUser(1); // Pasamos un ID de usuario fijo para este ejemplo
+
+  if (isLoading) return &lt;div>Cargando...&lt;/div>;
+  if (error) return &lt;div>Error al cargar los datos&lt;/div>;
+  if (!user) return null;
+
+  const handleSubmit = (data) => {
+    updateUser(data);
+    setIsEditing(false);
+  };
+
+  const handleCertificationSubmit = (data) => {
+    addCertification(data);
+  };
+
+  const handleProjectSubmit = (data) => {
+    addCollaborativeProject(data);
+  };
+
+  return (
+    &lt;div className="container mx-auto p-4 max-w-8xl">
+      &lt;div className="bg-white shadow-lg rounded-lg overflow-hidden">
+        &lt;BannerProfile user={user} updateBanner={updateBanner} />
+        &lt;div className="relative pt-16 px-6 pb-6">
+          &lt;div className="absolute -top-16 left-6">
+            &lt;AvatarProfile user={user} updateAvatar={updateAvatar} />
+          &lt;/div>
+          &lt;div className="mt-4">
+            &lt;h1 className="text-3xl font-bold">{`${user.name} ${user.last_name}`}&lt;/h1>
+            &lt;p className="text-gray-600">{user.email}&lt;/p>
+          &lt;/div>
+          
+          {isEditing ? (
+            &lt;ProfileFormProfile user={user} onSubmit={handleSubmit} />
+          ) : (
+            &lt;div className="mt-6">
+              &lt;button 
+                onClick={() => setIsEditing(true)}
+                className="mb-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out"
+              >
+                Editar Perfil
+              &lt;/button>
+              &lt;UserDetails user={user} />
+            &lt;/div>
+          )}
+
+          &lt;div className="mt-8 space-y-8">
+            &lt;CertificationsForm 
+              certifications={user.certifications || []} 
+              onSubmit={handleCertificationSubmit} 
+            />
+            
+            &lt;CollaborativeProjectsForm 
+              projects={user.collaborativeProjects || []} 
+              onSubmit={handleProjectSubmit} 
+            />
+          &lt;/div>
+        &lt;/div>
+      &lt;/div>
+    &lt;/div>
+  );
+};
+
+const UserDetails = ({ user }) => (
+  &lt;div className="bg-gray-50 p-6 rounded-lg shadow mt-6">
+    &lt;h2 className="text-xl font-semibold mb-4">Detalles del Usuario&lt;/h2>
+    &lt;div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      &lt;div>&lt;strong>Especialidad:&lt;/strong> {user.id_speciality}&lt;/div>
+      &lt;div>&lt;strong>Rol:&lt;/strong> {user.id_role}&lt;/div>
+      &lt;div>&lt;strong>Género:&lt;/strong> {user.gender}&lt;/div>
+      &lt;div>&lt;strong>Teléfono:&lt;/strong> {user.phoneNumber}&lt;/div>
+      &lt;div className="md:col-span-2">&lt;strong>Sobre mí:&lt;/strong> {user.aboutname}&lt;/div>
+      &lt;div>&lt;strong>Email verificado:&lt;/strong> {user.email_verified ? 'Sí' : 'No'}&lt;/div>
+      &lt;div>&lt;strong>Calificación promedio:&lt;/strong> {user.average_rating}&lt;/div>
+    &lt;/div>
+  &lt;/div>
+);
+
+export default UserProfileProfile;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AboutUs">AboutUs</a></li><li><a href="global.html#AboutUsPage">AboutUsPage</a></li><li><a href="global.html#AccordionItem">AccordionItem</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#AvatarProfile">AvatarProfile</a></li><li><a href="global.html#Banner">Banner</a></li><li><a href="global.html#BannerProfile">BannerProfile</a></li><li><a href="global.html#CallToAction">CallToAction</a></li><li><a href="global.html#CategoriesCarousel">CategoriesCarousel</a></li><li><a href="global.html#CertificationsForm">CertificationsForm</a></li><li><a href="global.html#ChatBubble">ChatBubble</a></li><li><a href="global.html#CollaborativeProjectsForm">CollaborativeProjectsForm</a></li><li><a href="global.html#CourseCard">CourseCard</a></li><li><a href="global.html#CourseModal">CourseModal</a></li><li><a href="global.html#Footer">Footer</a></li><li><a href="global.html#FriendList">FriendList</a></li><li><a href="global.html#FriendshipManager">FriendshipManager</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#HeroSection">HeroSection</a></li><li><a href="global.html#HomePublicPage">HomePublicPage</a></li><li><a href="global.html#Layout">Layout</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#PasswordRecovery">PasswordRecovery</a></li><li><a href="global.html#PasswordRecoveryForm">PasswordRecoveryForm</a></li><li><a href="global.html#PasswordReset">PasswordReset</a></li><li><a href="global.html#PasswordResetForm">PasswordResetForm</a></li><li><a href="global.html#PendingRequests">PendingRequests</a></li><li><a href="global.html#ProfileFormProfile">ProfileFormProfile</a></li><li><a href="global.html#ProfileInfo">ProfileInfo</a></li><li><a href="global.html#RatingModal">RatingModal</a></li><li><a href="global.html#Register">Register</a></li><li><a href="global.html#RegisterForm">RegisterForm</a></li><li><a href="global.html#SectionItem">SectionItem</a></li><li><a href="global.html#SuccessStories">SuccessStories</a></li><li><a href="global.html#SuccessStoriesPage">SuccessStoriesPage</a></li><li><a href="global.html#TemplateCard">TemplateCard</a></li><li><a href="global.html#TestimonialsCarousel">TestimonialsCarousel</a></li><li><a href="global.html#Trades">Trades</a></li><li><a href="global.html#TradesPage">TradesPage</a></li><li><a href="global.html#UserCard">UserCard</a></li><li><a href="global.html#UserDirectory">UserDirectory</a></li><li><a href="global.html#UserList">UserList</a></li><li><a href="global.html#UserProfile">UserProfile</a></li><li><a href="global.html#UserProfilePage">UserProfilePage</a></li><li><a href="global.html#UserProfileProfile">UserProfileProfile</a></li><li><a href="global.html#categories">categories</a></li><li><a href="global.html#features">features</a></li><li><a href="global.html#getChatRooms-Recuperatodaslassalasdechatdisponibles.">getChatRooms - Recupera todas las salas de chat disponibles.</a></li><li><a href="global.html#mockUsers">mockUsers</a></li><li><a href="global.html#root">root</a></li><li><a href="global.html#templatesData">templatesData</a></li><li><a href="global.html#updateBanner-Actualizaelbannerdeunusuarioconunarchivodeimagen.">updateBanner - Actualiza el banner de un usuario con un archivo de imagen.</a></li><li><a href="global.html#useAuthState">useAuthState</a></li><li><a href="global.html#useCategories">useCategories</a></li><li><a href="global.html#useChat">useChat</a></li><li><a href="global.html#useCollaboration">useCollaboration</a></li><li><a href="global.html#useForm">useForm</a></li><li><a href="global.html#useFriendships">useFriendships</a></li><li><a href="global.html#useHeroSection">useHeroSection</a></li><li><a href="global.html#useInView">useInView</a></li><li><a href="global.html#useMenu">useMenu</a></li><li><a href="global.html#usePasswordRecovery">usePasswordRecovery</a></li><li><a href="global.html#usePasswordReset">usePasswordReset</a></li><li><a href="global.html#useRating">useRating</a></li><li><a href="global.html#useRegister">useRegister</a></li><li><a href="global.html#useTestimonials">useTestimonials</a></li><li><a href="global.html#useUser">useUser</a></li><li><a href="global.html#useUsers">useUsers</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Fri Dec 13 2024 11:36:54 GMT-0500 (hora estándar de Perú)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

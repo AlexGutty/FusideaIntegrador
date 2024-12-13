@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: presentation/components/ProfileFormProfile.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: presentation/components/ProfileFormProfile.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from 'react';
+import { useForm } from 'react-hook-form';
+
+/**
+ * Componente ProfileFormProfile.
+ * Este componente es un formulario de edición de perfil que permite a los usuarios actualizar su información personal.
+ * Utiliza la librería `react-hook-form` para manejar el estado del formulario y la validación.
+ * 
+ * @param {Object} user - Objeto que contiene la información actual del usuario (nombre, apellido, género, número de teléfono, sobre mí).
+ * @param {Function} onSubmit - Función que se ejecuta cuando el formulario se envía con los datos actualizados.
+ * @returns {JSX.Element} - Un formulario que permite editar la información de perfil del usuario.
+ */
+
+export const ProfileFormProfile = ({ user, onSubmit }) => {
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    defaultValues: {
+      name: user.name,
+      last_name: user.last_name,
+      gender: user.gender,
+      phoneNumber: user.phoneNumber,
+      aboutname: user.aboutname,
+    }
+  });
+
+  const handleFormSubmit = (data) => {
+    onSubmit(data);
+  };
+
+  return (
+    &lt;form onSubmit={handleSubmit(handleFormSubmit)} className="mt-8">
+      &lt;div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        &lt;h2 className="text-2xl font-bold mb-6">Editar Perfil&lt;/h2>
+        &lt;div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          &lt;div>
+            &lt;label htmlFor="name" className="block text-gray-700 text-sm font-bold mb-2">Nombre&lt;/label>
+            &lt;input
+              id="name"
+              {...register('name', { required: 'Este campo es requerido' })}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            />
+            {errors.name &amp;&amp; (
+              &lt;p className="text-red-500 text-xs italic">{errors.name.message}&lt;/p>
+            )}
+          &lt;/div>
+
+          &lt;div>
+            &lt;label htmlFor="last_name" className="block text-gray-700 text-sm font-bold mb-2">Apellido&lt;/label>
+            &lt;input
+              id="last_name"
+              {...register('last_name', { required: 'Este campo es requerido' })}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            />
+            {errors.last_name &amp;&amp; (
+              &lt;p className="text-red-500 text-xs italic">{errors.last_name.message}&lt;/p>
+            )}
+          &lt;/div>
+
+          &lt;div>
+            &lt;label htmlFor="gender" className="block text-gray-700 text-sm font-bold mb-2">Género&lt;/label>
+            &lt;select
+              id="gender"
+              {...register('gender', { required: 'Este campo es requerido' })}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            >
+              &lt;option value="MASCULINO">Masculino&lt;/option>
+              &lt;option value="FEMININO">Femenino&lt;/option>
+              &lt;option value="OUTRO">Otro&lt;/option>
+            &lt;/select>
+            {errors.gender &amp;&amp; (
+              &lt;p className="text-red-500 text-xs italic">{errors.gender.message}&lt;/p>
+            )}
+          &lt;/div>
+
+          &lt;div>
+            &lt;label htmlFor="phoneNumber" className="block text-gray-700 text-sm font-bold mb-2">Teléfono&lt;/label>
+            &lt;input
+              id="phoneNumber"
+              {...register('phoneNumber', { required: 'Este campo es requerido' })}
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            />
+            {errors.phoneNumber &amp;&amp; (
+              &lt;p className="text-red-500 text-xs italic">{errors.phoneNumber.message}&lt;/p>
+            )}
+          &lt;/div>
+        &lt;/div>
+
+        &lt;div className="mt-6">
+          &lt;label htmlFor="aboutname" className="block text-gray-700 text-sm font-bold mb-2">Sobre mí&lt;/label>
+          &lt;textarea
+            id="aboutname"
+            {...register('aboutname', { required: 'Este campo es requerido' })}
+            rows={4}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          />
+          {errors.aboutname &amp;&amp; (
+            &lt;p className="text-red-500 text-xs italic">{errors.aboutname.message}&lt;/p>
+          )}
+        &lt;/div>
+
+        &lt;div className="mt-6">
+          &lt;button 
+            type="submit" 
+            className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300 ease-in-out"
+          >
+            Guardar Cambios
+          &lt;/button>
+        &lt;/div>
+      &lt;/div>
+    &lt;/form>
+  );
+};
+
+
+
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AboutUs">AboutUs</a></li><li><a href="global.html#AboutUsPage">AboutUsPage</a></li><li><a href="global.html#AccordionItem">AccordionItem</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#AvatarProfile">AvatarProfile</a></li><li><a href="global.html#Banner">Banner</a></li><li><a href="global.html#BannerProfile">BannerProfile</a></li><li><a href="global.html#CallToAction">CallToAction</a></li><li><a href="global.html#CategoriesCarousel">CategoriesCarousel</a></li><li><a href="global.html#CertificationsForm">CertificationsForm</a></li><li><a href="global.html#ChatBubble">ChatBubble</a></li><li><a href="global.html#CollaborativeProjectsForm">CollaborativeProjectsForm</a></li><li><a href="global.html#CourseCard">CourseCard</a></li><li><a href="global.html#CourseModal">CourseModal</a></li><li><a href="global.html#Footer">Footer</a></li><li><a href="global.html#FriendList">FriendList</a></li><li><a href="global.html#FriendshipManager">FriendshipManager</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#HeroSection">HeroSection</a></li><li><a href="global.html#HomePublicPage">HomePublicPage</a></li><li><a href="global.html#Layout">Layout</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#PasswordRecovery">PasswordRecovery</a></li><li><a href="global.html#PasswordRecoveryForm">PasswordRecoveryForm</a></li><li><a href="global.html#PasswordReset">PasswordReset</a></li><li><a href="global.html#PasswordResetForm">PasswordResetForm</a></li><li><a href="global.html#PendingRequests">PendingRequests</a></li><li><a href="global.html#ProfileFormProfile">ProfileFormProfile</a></li><li><a href="global.html#ProfileInfo">ProfileInfo</a></li><li><a href="global.html#RatingModal">RatingModal</a></li><li><a href="global.html#Register">Register</a></li><li><a href="global.html#RegisterForm">RegisterForm</a></li><li><a href="global.html#SectionItem">SectionItem</a></li><li><a href="global.html#SuccessStories">SuccessStories</a></li><li><a href="global.html#SuccessStoriesPage">SuccessStoriesPage</a></li><li><a href="global.html#TemplateCard">TemplateCard</a></li><li><a href="global.html#TestimonialsCarousel">TestimonialsCarousel</a></li><li><a href="global.html#Trades">Trades</a></li><li><a href="global.html#TradesPage">TradesPage</a></li><li><a href="global.html#UserCard">UserCard</a></li><li><a href="global.html#UserDirectory">UserDirectory</a></li><li><a href="global.html#UserList">UserList</a></li><li><a href="global.html#UserProfile">UserProfile</a></li><li><a href="global.html#UserProfilePage">UserProfilePage</a></li><li><a href="global.html#UserProfileProfile">UserProfileProfile</a></li><li><a href="global.html#categories">categories</a></li><li><a href="global.html#features">features</a></li><li><a href="global.html#getChatRooms-Recuperatodaslassalasdechatdisponibles.">getChatRooms - Recupera todas las salas de chat disponibles.</a></li><li><a href="global.html#mockUsers">mockUsers</a></li><li><a href="global.html#root">root</a></li><li><a href="global.html#templatesData">templatesData</a></li><li><a href="global.html#updateBanner-Actualizaelbannerdeunusuarioconunarchivodeimagen.">updateBanner - Actualiza el banner de un usuario con un archivo de imagen.</a></li><li><a href="global.html#useAuthState">useAuthState</a></li><li><a href="global.html#useCategories">useCategories</a></li><li><a href="global.html#useChat">useChat</a></li><li><a href="global.html#useCollaboration">useCollaboration</a></li><li><a href="global.html#useForm">useForm</a></li><li><a href="global.html#useFriendships">useFriendships</a></li><li><a href="global.html#useHeroSection">useHeroSection</a></li><li><a href="global.html#useInView">useInView</a></li><li><a href="global.html#useMenu">useMenu</a></li><li><a href="global.html#usePasswordRecovery">usePasswordRecovery</a></li><li><a href="global.html#usePasswordReset">usePasswordReset</a></li><li><a href="global.html#useRating">useRating</a></li><li><a href="global.html#useRegister">useRegister</a></li><li><a href="global.html#useTestimonials">useTestimonials</a></li><li><a href="global.html#useUser">useUser</a></li><li><a href="global.html#useUsers">useUsers</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Fri Dec 13 2024 11:36:54 GMT-0500 (hora estándar de Perú)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

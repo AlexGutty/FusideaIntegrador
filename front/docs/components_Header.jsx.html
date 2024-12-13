@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/Header.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/Header.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useRef, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import useMenu from '../hooks/useMenu';
+import useAuthState from '../hooks/useAuthState';
+import { HomeIcon, UserGroupIcon, CurrencyDollarIcon, DocumentDuplicateIcon, AcademicCapIcon, UserCircleIcon, ArrowRightOnRectangleIcon } from '@heroicons/react/24/outline';
+
+/**
+ * Componente de cabecera (Header) que se muestra en la parte superior de la aplicación.
+ * Funcionalidades destacadas:
+ * - Búsqueda: Permite a los usuarios autenticados buscar contenido dentro de la aplicación.
+ * - Menú de navegación: Ofrece enlaces dinámicos dependiendo del estado de autenticación.
+ * - Menú de perfil: Permite acceder a las opciones de perfil y cerrar sesión cuando el usuario está autenticado.
+ * 
+ * @returns {JSX.Element} - Renderiza la cabecera con los enlaces de navegación y botones de autenticación o usuario.
+ */
+const Header = () => {
+  const { isMenuOpen, toggleMenu } = useMenu();
+  const { isAuthenticated, user, logout } = useAuthState();
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const profileMenuRef = useRef(null);
+  const location = useLocation();
+
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+    console.log('Buscando:', e.target.value);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (profileMenuRef.current &amp;&amp; !profileMenuRef.current.contains(event.target)) {
+        setIsProfileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    setIsProfileMenuOpen(false);
+  }, [location]);
+
+  useEffect(() => {
+    const controlNavbar = () => {
+      if (typeof window !== 'undefined') {
+        const currentScrollY = window.scrollY;
+
+        if (currentScrollY > lastScrollY) {
+          setIsVisible(false);
+        } else {
+          setIsVisible(true);
+        }
+
+        if (currentScrollY > 0) {
+          setIsScrolled(true);
+        } else {
+          setIsScrolled(false);
+        }
+
+        setLastScrollY(currentScrollY);
+      }
+    };
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('scroll', controlNavbar);
+
+      return () => {
+        window.removeEventListener('scroll', controlNavbar);
+      };
+    }
+  }, [lastScrollY]);
+
+  const isActivePath = (path) => {
+    return location.pathname === path;
+  };
+
+  const navLinkClasses = (path) =>
+    `flex items-center px-4 py-2 rounded-lg transition-colors duration-200 font-medium ${
+      isActivePath(path)
+        ? 'bg-[#e8f3e5] text-[#4c9141]'
+        : 'text-gray-600 hover:bg-[#f0f9ed] hover:text-[#4c9141]'
+    }`;
+
+  const authButtonClasses = "flex items-center px-6 py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105";
+
+  return (
+    &lt;header className={`sticky top-0 z-50 transition-all duration-300 ${
+      isVisible ? 'translate-y-0' : '-translate-y-full'
+    } ${
+      isScrolled ? 'bg-white shadow-md' : 'bg-transparent'
+    }`}>
+      &lt;div className="flex flex-col md:flex-row items-center justify-between p-4 mx-auto max-w-7xl">
+        {/* Logo */}
+        &lt;Link to="/" className="transform transition-transform duration-200 hover:scale-105">
+          &lt;img src="../imgs/logo1.jpg" alt="Logo" className="h-12 w-auto rounded-lg shadow-sm" />
+        &lt;/Link>
+
+        {/* Search Bar - Solo visible cuando está autenticado */}
+        {isAuthenticated &amp;&amp; (
+          &lt;div className="flex items-center w-full md:w-auto md:ml-4 my-4 md:my-0">
+            &lt;div className="relative w-full md:w-64">
+              &lt;input
+                type="text"
+                value={searchTerm}
+                onChange={handleSearch}
+                placeholder="Buscar..."
+                className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-[#4c9141] focus:ring-2 focus:ring-[#e8f3e5] transition-all duration-200 outline-none"
+              />
+              &lt;svg
+                className="absolute right-3 top-2.5 h-5 w-5 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                &lt;path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              &lt;/svg>
+            &lt;/div>
+          &lt;/div>
+        )}
+
+        {/* Navigation Menu */}
+        &lt;nav className={`md:flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-2 ${
+          isMenuOpen ? 'flex' : 'hidden md:flex'
+        }`}>
+          &lt;Link to="/" className={navLinkClasses('/')}>
+            &lt;HomeIcon className="w-5 h-5 mr-2" />
+            Home
+          &lt;/Link>
+          {isAuthenticated ? (
+            &lt;>
+              &lt;Link to="/my-trades
+              " className={navLinkClasses('/connect')}>
+                &lt;UserGroupIcon className="w-5 h-5 mr-2" />
+                Conecta
+              &lt;/Link>
+              &lt;Link to="/my-trades" className={navLinkClasses('/trades')}>
+                &lt;CurrencyDollarIcon className="w-5 h-5 mr-2" />
+                Trades
+              &lt;/Link>
+              &lt;Link to="/templates" className={navLinkClasses('/templates')}>
+                &lt;DocumentDuplicateIcon className="w-5 h-5 mr-2" />
+                Plantillas
+              &lt;/Link>
+              &lt;Link to="/courses" className={navLinkClasses('/courses')}>
+                &lt;AcademicCapIcon className="w-5 h-5 mr-2" />
+                Cursos
+              &lt;/Link>
+            &lt;/>
+          ) : (
+            &lt;>
+              &lt;Link to="/trades" className={navLinkClasses('/trades')}>
+                &lt;CurrencyDollarIcon className="w-5 h-5 mr-2" />
+                Trades
+              &lt;/Link>
+              &lt;Link to="/about-us" className={navLinkClasses('/about-us')}>
+                &lt;UserGroupIcon className="w-5 h-5 mr-2" />
+                Nosotros
+              &lt;/Link>
+            &lt;/>
+          )}
+        &lt;/nav>
+
+        {/* User Profile or Auth Buttons */}
+        {isAuthenticated ? (
+          &lt;div className="relative" ref={profileMenuRef}>
+            &lt;button
+              onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
+              className="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-[#f0f9ed] transition-colors duration-200"
+            >
+              &lt;img
+                src={user?.avatar || 'https://via.placeholder.com/40'}
+                alt="Profile"
+                className="h-10 w-10 rounded-full border-2 border-[#4c9141] object-cover"
+              />
+              &lt;span className="text-gray-800 font-medium">{user?.name || 'Usuario'}&lt;/span>
+            &lt;/button>
+            
+            &lt;div className={`absolute right-0 mt-2 w-56 ${
+              isProfileMenuOpen ? 'block' : 'hidden'
+            }`}>
+              &lt;div className="py-1 bg-white rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
+                &lt;Link
+                  to="/my-profile"
+                  className="flex items-center px-4 py-2 text-gray-700 hover:bg-[#f0f9ed] transition-colors duration-200"
+                >
+                  &lt;UserCircleIcon className="w-5 h-5 mr-2 text-[#4c9141]" />
+                  Ir a mi perfil
+                &lt;/Link>
+                &lt;button
+                  onClick={() => {
+                    logout();
+                    setIsProfileMenuOpen(false);
+                  }}
+                  className="flex items-center w-full text-left px-4 py-2 text-[#4c9141] hover:bg-[#f0f9ed] transition-colors duration-200"
+                >
+                  &lt;ArrowRightOnRectangleIcon className="w-5 h-5 mr-2" />
+                  Cerrar sesión
+                &lt;/button>
+              &lt;/div>
+            &lt;/div>
+          &lt;/div>
+        ) : (
+          &lt;div className="flex space-x-3">
+            &lt;Link
+              to="/login"
+              className={`${authButtonClasses} bg-[#4c9141] text-white hover:bg-[#3a6f32]`}
+            >
+              &lt;UserCircleIcon className="w-5 h-5 mr-2" />
+              Iniciar Sesión
+            &lt;/Link>
+            &lt;Link
+              to="/register"
+              className={`${authButtonClasses} border-2 border-[#4c9141] text-[#4c9141] hover:bg-[#f0f9ed]`}
+            >
+              &lt;UserGroupIcon className="w-5 h-5 mr-2" />
+              Registrarse
+            &lt;/Link>
+          &lt;/div>
+        )}
+      &lt;/div>
+    &lt;/header>
+  );
+};
+
+export default Header;
+
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AboutUs">AboutUs</a></li><li><a href="global.html#AboutUsPage">AboutUsPage</a></li><li><a href="global.html#AccordionItem">AccordionItem</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#AvatarProfile">AvatarProfile</a></li><li><a href="global.html#Banner">Banner</a></li><li><a href="global.html#BannerProfile">BannerProfile</a></li><li><a href="global.html#CallToAction">CallToAction</a></li><li><a href="global.html#CategoriesCarousel">CategoriesCarousel</a></li><li><a href="global.html#CertificationsForm">CertificationsForm</a></li><li><a href="global.html#ChatBubble">ChatBubble</a></li><li><a href="global.html#CollaborativeProjectsForm">CollaborativeProjectsForm</a></li><li><a href="global.html#CourseCard">CourseCard</a></li><li><a href="global.html#CourseModal">CourseModal</a></li><li><a href="global.html#Footer">Footer</a></li><li><a href="global.html#FriendList">FriendList</a></li><li><a href="global.html#FriendshipManager">FriendshipManager</a></li><li><a href="global.html#Header">Header</a></li><li><a href="global.html#HeroSection">HeroSection</a></li><li><a href="global.html#HomePublicPage">HomePublicPage</a></li><li><a href="global.html#Layout">Layout</a></li><li><a href="global.html#Login">Login</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#PasswordRecovery">PasswordRecovery</a></li><li><a href="global.html#PasswordRecoveryForm">PasswordRecoveryForm</a></li><li><a href="global.html#PasswordReset">PasswordReset</a></li><li><a href="global.html#PasswordResetForm">PasswordResetForm</a></li><li><a href="global.html#PendingRequests">PendingRequests</a></li><li><a href="global.html#ProfileFormProfile">ProfileFormProfile</a></li><li><a href="global.html#ProfileInfo">ProfileInfo</a></li><li><a href="global.html#RatingModal">RatingModal</a></li><li><a href="global.html#Register">Register</a></li><li><a href="global.html#RegisterForm">RegisterForm</a></li><li><a href="global.html#SectionItem">SectionItem</a></li><li><a href="global.html#SuccessStories">SuccessStories</a></li><li><a href="global.html#SuccessStoriesPage">SuccessStoriesPage</a></li><li><a href="global.html#TemplateCard">TemplateCard</a></li><li><a href="global.html#TestimonialsCarousel">TestimonialsCarousel</a></li><li><a href="global.html#Trades">Trades</a></li><li><a href="global.html#TradesPage">TradesPage</a></li><li><a href="global.html#UserCard">UserCard</a></li><li><a href="global.html#UserDirectory">UserDirectory</a></li><li><a href="global.html#UserList">UserList</a></li><li><a href="global.html#UserProfile">UserProfile</a></li><li><a href="global.html#UserProfilePage">UserProfilePage</a></li><li><a href="global.html#UserProfileProfile">UserProfileProfile</a></li><li><a href="global.html#categories">categories</a></li><li><a href="global.html#features">features</a></li><li><a href="global.html#getChatRooms-Recuperatodaslassalasdechatdisponibles.">getChatRooms - Recupera todas las salas de chat disponibles.</a></li><li><a href="global.html#mockUsers">mockUsers</a></li><li><a href="global.html#root">root</a></li><li><a href="global.html#templatesData">templatesData</a></li><li><a href="global.html#updateBanner-Actualizaelbannerdeunusuarioconunarchivodeimagen.">updateBanner - Actualiza el banner de un usuario con un archivo de imagen.</a></li><li><a href="global.html#useAuthState">useAuthState</a></li><li><a href="global.html#useCategories">useCategories</a></li><li><a href="global.html#useChat">useChat</a></li><li><a href="global.html#useCollaboration">useCollaboration</a></li><li><a href="global.html#useForm">useForm</a></li><li><a href="global.html#useFriendships">useFriendships</a></li><li><a href="global.html#useHeroSection">useHeroSection</a></li><li><a href="global.html#useInView">useInView</a></li><li><a href="global.html#useMenu">useMenu</a></li><li><a href="global.html#usePasswordRecovery">usePasswordRecovery</a></li><li><a href="global.html#usePasswordReset">usePasswordReset</a></li><li><a href="global.html#useRating">useRating</a></li><li><a href="global.html#useRegister">useRegister</a></li><li><a href="global.html#useTestimonials">useTestimonials</a></li><li><a href="global.html#useUser">useUser</a></li><li><a href="global.html#useUsers">useUsers</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Fri Dec 13 2024 11:36:54 GMT-0500 (hora estándar de Perú)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
