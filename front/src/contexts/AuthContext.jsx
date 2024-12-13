@@ -1,41 +1,51 @@
 import React, { createContext, useState, useEffect } from 'react';
+import api from '../api/axios'; // Importa la instancia de Axios configurada
 
-// Crear el contexto
 export const AuthContext = createContext();
 
-// Proveedor del contexto
 export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Simular una función para iniciar sesión
-  const login = (userData) => {
-    setIsAuthenticated(true);
-    setUser(userData);
-    // Puedes guardar el token en localStorage o cookies si lo necesitas
-  };
-
-  // Función para cerrar sesión
-  const logout = () => {
-    setIsAuthenticated(false);
-    setUser(null);
-    // Limpia el token o cualquier otra información en almacenamiento local
-  };
-
-  // Verificar si el usuario tiene una sesión activa al cargar la app
   useEffect(() => {
-    const savedUser = JSON.parse(localStorage.getItem('user'));
-    if (savedUser) {
-      setIsAuthenticated(true);
-      setUser(savedUser);
-    }
+    const checkAuth = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (token) {
+          const { data } = await api.get('/auth/me', {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          setUser(data);
+        }
+      } catch (error) {
+        console.error('Error al verificar autenticación', error);
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+    checkAuth();
   }, []);
 
-  // Proveer valores al resto de la app
+  const login = async (credentials) => {
+    try {
+      const { data } = await api.post('/auth/login', credentials); // Usa la instancia de Axios
+      localStorage.setItem('token', data.token);
+      setUser(data.user);
+    } catch (error) {
+      console.error('Error al iniciar sesión:', error.response?.data || error.message);
+      throw error;
+    }
+  };
+
+  const logout = () => {
+    localStorage.removeItem('token');
+    setUser(null);
+  };
+
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
-      {children}
+    <AuthContext.Provider value={{ user, login, logout, loading }}>
+      {!loading && children}
     </AuthContext.Provider>
   );
 };
-
