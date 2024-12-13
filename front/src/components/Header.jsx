@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import useMenu from '../hooks/useMenu';
 import useAuth from '../hooks/useAuth';
+import useNotifications from '../hooks/useNotification'; // Importa el nuevo hook
 import { 
   HomeIcon, 
   UserGroupIcon, 
@@ -23,7 +24,8 @@ const Header = () => {
   const profileMenuRef = useRef(null);
   const location = useLocation();
 
-  const [notifications, setNotifications] = useState([]);
+  const { notifications, loading: notificationsLoading, error: notificationsError, markAsRead } = useNotifications();
+  const unreadNotificationsCount = notifications.filter(n => !n.isRead).length;
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const notificationsRef = useRef(null);
 
@@ -65,21 +67,6 @@ const Header = () => {
 
   const authButtonClasses =
     'flex items-center px-6 py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105';
-
-  // Simulación de obtención de notificaciones (puedes reemplazarlo con lógica real)
-  useEffect(() => {
-    if (isAuthenticated) {
-      // Simula una llamada a una API para obtener notificaciones
-      // Aquí puedes reemplazarlo con una llamada real
-      setNotifications([
-        { id: 1, message: 'Nueva trade disponible', isRead: false },
-        { id: 2, message: 'Actualización de perfil', isRead: true },
-        // ...otras notificaciones
-      ]);
-    }
-  }, [isAuthenticated]);
-
-  const unreadNotificationsCount = notifications.filter(n => !n.isRead).length;
 
   return (
     <header className="sticky top-0 bg-white shadow-md z-50">
@@ -137,7 +124,7 @@ const Header = () => {
             isMenuOpen ? 'flex' : 'hidden md:flex'
           }`}
         >
-          <Link to="/" className={navLinkClasses('/')}>
+          <Link to="/home" className={navLinkClasses('/')}>
             <HomeIcon className="w-5 h-5 mr-2" />
             Home
           </Link>
@@ -202,10 +189,7 @@ const Header = () => {
                           <li 
                             key={notification.id} 
                             className={`py-2 border-b border-gray-200 ${!notification.isRead ? 'bg-gray-100' : ''}`}
-                            onClick={() => {
-                              // Aquí puedes agregar lógica para manejar la notificación al hacer clic
-                              // Por ejemplo, marcarla como leída o redirigir a una página específica
-                            }}
+                            onClick={() => markAsRead(notification.id)}
                           >
                             {notification.message}
                           </li>

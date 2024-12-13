@@ -56,6 +56,7 @@ const RegisterForm = () => {
 
   const countryCodes = [
     { code: '+1', country: 'USA' },
+    { code: '+51', country: 'Perú' },
     { code: '+52', country: 'México' },
     { code: '+34', country: 'España' },
     { code: '+54', country: 'Argentina' },

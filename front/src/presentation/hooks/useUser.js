@@ -1,130 +1,79 @@
-import { useQuery, useMutation, useQueryClient } from 'react-query';
+import { useState, useEffect } from 'react';
+import api from '../../api/axios';
 
-export const useUser = (userId) => {
-  const queryClient = useQueryClient();
+export const useUser = () => {
+  const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Simulamos un servicio local
-  const localService = {
-    getUser: () => {
-      const storedUser = localStorage.getItem('user');
-      return Promise.resolve(storedUser ? JSON.parse(storedUser) : {
-        id: 1,
-        name: 'John',
-        last_name: 'Doe',
-        email: 'john.doe@example.com',
-        id_speciality: 'Developer',
-        id_role: 'Senior',
-        gender: 'MASCULINO',
-        phoneNumber: '123-456-7890',
-        aboutname: 'Passionate about coding and technology.',
-        email_verified: true,
-        average_rating: 4.5,
-        avatar: '/placeholder.svg?height=100&width=100',
-        banner: '/placeholder.svg?height=200&width=800',
-        certifications: [],
-        collaborativeProjects: []
-      });
-    },
-    updateUser: (data) => {
-      localStorage.setItem('user', JSON.stringify(data));
-      return Promise.resolve(data);
-    },
-    updateAvatar: (file) => {
-      const user = JSON.parse(localStorage.getItem('user') || '{}');
-      const updatedUser = { ...user, avatar: URL.createObjectURL(file) };
-      localStorage.setItem('user', JSON.stringify(updatedUser));
-      return Promise.resolve(updatedUser);
-    },
-    updateBanner: (file) => {
-      const user = JSON.parse(localStorage.getItem('user') || '{}');
-      const updatedUser = { ...user, banner: URL.createObjectURL(file) };
-      localStorage.setItem('user', JSON.stringify(updatedUser));
-      return Promise.resolve(updatedUser);
-    },
-    addCertification: (certification) => {
-      const user = JSON.parse(localStorage.getItem('user') || '{}');
-      const updatedUser = {
-        ...user,
-        certifications: [...(user.certifications || []), certification]
-      };
-      localStorage.setItem('user', JSON.stringify(updatedUser));
-      return Promise.resolve(updatedUser);
-    },
-    addCollaborativeProject: (project) => {
-      const user = JSON.parse(localStorage.getItem('user') || '{}');
-      const updatedUser = {
-        ...user,
-        collaborativeProjects: [...(user.collaborativeProjects || []), project]
-      };
-      localStorage.setItem('user', JSON.stringify(updatedUser));
-      return Promise.resolve(updatedUser);
+  const fetchUser = async () => {
+    try {
+      const { data } = await api.get('/auth/me'); // Endpoint que devuelve los datos del usuario
+      setUser(data);
+    } catch (err) {
+      setError(err.response?.data?.error || 'Error al cargar los datos del usuario');
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  // Query principal para obtener datos del usuario
-  const { data: user, isLoading, error } = useQuery(
-    ['user', userId],
-    () => localService.getUser(userId)
-  );
-
-  // Mutation para actualizar el perfil del usuario
-  const updateUser = useMutation(
-    (updateData) => localService.updateUser({ ...user, ...updateData }),
-    {
-      onSuccess: (updatedUser) => {
-        queryClient.setQueryData(['user', userId], updatedUser);
-      },
+  const updateUser = async (updatedData) => {
+    try {
+      const { data } = await api.put('/auth/update', updatedData); // Endpoint para actualizar usuario
+      setUser(data);
+    } catch (err) {
+      setError(err.response?.data?.error || 'Error al actualizar el perfil');
     }
-  );
+  };
 
-  // Mutation para actualizar el avatar
-  const updateAvatar = useMutation(
-    (file) => localService.updateAvatar(file),
-    {
-      onSuccess: (updatedUser) => {
-        queryClient.setQueryData(['user', userId], updatedUser);
-      },
+  const updateAvatar = async (avatar) => {
+    try {
+      const { data } = await api.put('/auth/update-avatar', { avatar });
+      setUser(data);
+    } catch (err) {
+      setError(err.response?.data?.error || 'Error al actualizar el avatar');
     }
-  );
+  };
 
-  // Mutation para actualizar el banner
-  const updateBanner = useMutation(
-    (file) => localService.updateBanner(file),
-    {
-      onSuccess: (updatedUser) => {
-        queryClient.setQueryData(['user', userId], updatedUser);
-      },
+  const updateBanner = async (banner) => {
+    try {
+      const { data } = await api.put('/auth/update-banner', { banner });
+      setUser(data);
+    } catch (err) {
+      setError(err.response?.data?.error || 'Error al actualizar el banner');
     }
-  );
+  };
 
-  // Mutation para añadir certificación
-  const addCertification = useMutation(
-    (certification) => localService.addCertification({ ...certification, id: Date.now() }),
-    {
-      onSuccess: (updatedUser) => {
-        queryClient.setQueryData(['user', userId], updatedUser);
-      },
+  const addCertification = async (certification) => {
+    try {
+      const { data } = await api.post('/auth/add-certification', { certification });
+      setUser(data);
+    } catch (err) {
+      setError(err.response?.data?.error || 'Error al agregar certificación');
     }
-  );
+  };
 
-  // Mutation para añadir proyecto colaborativo
-  const addCollaborativeProject = useMutation(
-    (project) => localService.addCollaborativeProject({ ...project, id: Date.now() }),
-    {
-      onSuccess: (updatedUser) => {
-        queryClient.setQueryData(['user', userId], updatedUser);
-      },
+  const addCollaborativeProject = async (project) => {
+    try {
+      const { data } = await api.post('/auth/add-project', { project });
+      setUser(data);
+    } catch (err) {
+      setError(err.response?.data?.error || 'Error al agregar proyecto colaborativo');
     }
-  );
+  };
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
 
   return {
     user,
     isLoading,
     error,
-    updateUser: updateUser.mutate,
-    updateAvatar: updateAvatar.mutate,
-    updateBanner: updateBanner.mutate,
-    addCertification: addCertification.mutate,
-    addCollaborativeProject: addCollaborativeProject.mutate
+    updateUser,
+    updateAvatar,
+    updateBanner,
+    addCertification,
+    addCollaborativeProject,
   };
 };

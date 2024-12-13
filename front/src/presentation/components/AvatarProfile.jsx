@@ -1,8 +1,8 @@
 import React from 'react';
-import useAuthState from '../../hooks/useAuthState';
+import useAuth from '../../hooks/useAuth';
 
 export const AvatarProfile = ({ user, updateAvatar }) => {
-  const { updateUserAvatar } = useAuthState();
+  const { updateUserAvatar } = useAuth();
 
   const handleAvatarChange = async (event) => {
     const file = event.target.files[0];
