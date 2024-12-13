@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const authMiddleware = (req, res, next) => {
-  // Intenta obtener el token desde el encabezado o desde la cookie
+const authenticate = (req, res, next) => {
   const token =
     req.headers.authorization?.split(' ')[1] || req.cookies.token;
 
@@ -10,12 +9,8 @@ const authMiddleware = (req, res, next) => {
   }
 
   try {
-    // Verifica y decodifica el token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    // Agrega la información del usuario al objeto `req` para que esté disponible en las rutas protegidas
-    req.user = decoded.userId;
-
+    req.user = decoded.userId; // Agrega el ID del usuario al request
     next();
   } catch (error) {
     console.error('Error al verificar el token:', error);
@@ -23,4 +18,4 @@ const authMiddleware = (req, res, next) => {
   }
 };
 
-module.exports = authMiddleware;
+module.exports = { authenticate };

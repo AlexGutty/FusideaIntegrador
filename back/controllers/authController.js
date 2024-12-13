@@ -107,3 +107,122 @@ exports.logout = (req, res) => {
 
   res.status(200).json({ message: 'Sesión cerrada exitosamente' });
 };
+
+// Obtener datos del usuario actual
+exports.getMe = async (req, res) => {
+  try {
+    const user = await User.findById(req.user).select('-password'); // Excluye la contraseña
+    if (!user) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+    res.status(200).json(user);
+  } catch (err) {
+    console.error('Error al obtener los datos del usuario:', err);
+    res.status(500).json({ error: 'Error al obtener los datos del usuario' });
+  }
+};
+
+// Actualizar datos del usuario
+exports.updateUser = async (req, res) => {
+  try {
+    const updates = req.body;
+    const user = await User.findByIdAndUpdate(req.user, updates, {
+      new: true, // Devuelve el documento actualizado
+      runValidators: true, // Ejecuta validadores de esquema
+    }).select('-password');
+
+    if (!user) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    res.status(200).json(user);
+  } catch (err) {
+    console.error('Error al actualizar el usuario:', err);
+    res.status(500).json({ error: 'Error al actualizar el perfil' });
+  }
+};
+
+// Actualizar avatar
+exports.updateAvatar = async (req, res) => {
+  try {
+    const { avatar } = req.body;
+    const user = await User.findByIdAndUpdate(
+      req.user,
+      { avatar },
+      { new: true }
+    ).select('-password');
+
+    if (!user) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    res.status(200).json(user);
+  } catch (err) {
+    console.error('Error al actualizar el avatar:', err);
+    res.status(500).json({ error: 'Error al actualizar el avatar' });
+  }
+};
+
+// Actualizar banner
+exports.updateBanner = async (req, res) => {
+  try {
+    const { banner } = req.body;
+    const user = await User.findByIdAndUpdate(
+      req.user,
+      { banner },
+      { new: true }
+    ).select('-password');
+
+    if (!user) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    res.status(200).json(user);
+  } catch (err) {
+    console.error('Error al actualizar el banner:', err);
+    res.status(500).json({ error: 'Error al actualizar el banner' });
+  }
+};
+
+// Agregar certificación
+exports.addCertification = async (req, res) => {
+  try {
+    const { certification } = req.body;
+    const user = await User.findByIdAndUpdate(
+      req.user,
+      { $push: { certifications: certification } }, // Agrega la certificación al array
+      { new: true }
+    ).select('-password');
+
+    if (!user) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    res.status(200).json(user);
+  } catch (err) {
+    console.error('Error al agregar certificación:', err);
+    res.status(500).json({ error: 'Error al agregar certificación' });
+  }
+};
+
+// Agregar proyecto colaborativo
+exports.addCollaborativeProject = async (req, res) => {
+  try {
+    const { project } = req.body;
+    const user = await User.findByIdAndUpdate(
+      req.user,
+      { $push: { collaborativeProjects: project } }, // Agrega el proyecto al array
+      { new: true }
+    ).select('-password');
+
+    if (!user) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    res.status(200).json(user);
+  } catch (err) {
+    console.error('Error al agregar proyecto colaborativo:', err);
+    res.status(500).json({ error: 'Error al agregar proyecto colaborativo' });
+  }
+};
+
