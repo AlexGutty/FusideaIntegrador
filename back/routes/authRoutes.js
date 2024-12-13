@@ -1,13 +1,17 @@
-import express from 'express';
-import { login, register, passwordRecovery, passwordReset } from '../controllers/authController.js';
-import { validateLogin, validateRegister, validatePasswordRecovery, validatePasswordReset } from '../middlewares/validators.js';
-
+const express = require('express');
 const router = express.Router();
+const authController = require('../controllers/authController');
+const Joi = require('joi');
+const validateRequest = require('../middlewares/validateRequest');
 
-router.post('/login', validateLogin, login);
-router.post('/register', validateRegister, register);
-router.post('/password-recovery', validatePasswordRecovery, passwordRecovery);
-router.post('/password-reset', validatePasswordReset, passwordReset);
+const loginSchema = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().min(6).required()
+});
 
-export default router;
+// Rutas de autenticación
+router.post('/register', authController.register);
+router.post('/login', validateRequest(loginSchema), authController.login);
+router.post('/forgot-password', authController.forgotPassword);
 
+module.exports = router;

@@ -1,11 +1,8 @@
-import { logger } from '../utils/logger.js';
-
-export const errorHandler = (err, req, res, next) => {
-  logger.error(err.stack);
-
-  res.status(500).json({
-    message: 'An unexpected error occurred',
-    error: process.env.NODE_ENV === 'production' ? {} : err
+const errorHandler = (err, req, res, next) => {
+  console.error(err.stack);
+  res.status(err.status || 500).json({
+    error: err.message || 'Ocurrió un error en el servidor'
   });
 };
 
+module.exports = errorHandler;
