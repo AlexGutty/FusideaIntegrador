@@ -1,33 +1,31 @@
 const express = require('express');
-const cors = require('cors'); // Importar cors
+const cors = require('cors');
+const connectDB = require('./config/db');
+const routes = require('./routes');
+const errorHandler = require('./middlewares/errorHandler');
+const notFoundMiddleware = require('./middlewares/notFoundMiddleware');
+const loggerMiddleware = require('./middlewares/loggerMiddleware');
 require('dotenv').config();
-const db = require('./utils/db');
-const authRoutes = require('./routes/authRoutes');
 
 const app = express();
+
+// Middlewares globales
+app.use(cors({ origin: 'http://localhost:5173', methods: ['GET', 'POST', 'PUT', 'DELETE'], credentials: true }));
 app.use(express.json());
+app.use(loggerMiddleware);
 
-// Configurar CORS
-const corsOptions = {
-  origin: 'http://localhost:5173', // Cambia esto a la URL de tu frontend
-  methods: 'GET,POST,PUT,DELETE',
-  allowedHeaders: 'Content-Type,Authorization',
-};
+// Conexión a la base de datos
+connectDB();
 
-app.use(cors(corsOptions));
+// Rutas principales
+app.use('/api', routes);
 
-// Rutas
-app.use('/api/auth', authRoutes);
+// Manejo de errores y rutas no encontradas
+app.use(notFoundMiddleware);
+app.use(errorHandler);
 
-// Verificar conexión con la base de datos
-db.authenticate()
-  .then(() => console.log('Conexión con la base de datos establecida'))
-  .catch((err) => console.error('Error en la conexión:', err));
-
-// Iniciar el servidor
+// Iniciar servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Servidor escuchando en el puerto ${PORT}`);
+  console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
-
-

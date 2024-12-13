@@ -1,84 +1,47 @@
+const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { User, Role } = require('../models');
 
-// Registrar usuario
-const register = async (req, res) => {
+// Registro de usuario
+exports.register = async (req, res) => {
   try {
-    const { name, last_name, gender, email, password, id_role } = req.body;
-
-    if (!name || !last_name || !gender || !email || !password || !id_role) {
-      return res.status(400).json({ message: 'Todos los campos son obligatorios.' });
-    }
-
-    const existingUser = await User.findOne({ where: { email } });
-    if (existingUser) {
-      return res.status(400).json({ message: 'El correo ya está registrado.' });
-    }
-
+    const { email, password, ...rest } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    const newUser = await User.create({
-      name,
-      last_name,
-      gender,
-      email,
-      password: hashedPassword,
-      id_role,
-    });
-
-    res.status(201).json({ message: 'Usuario registrado exitosamente.', user: newUser });
+    const user = await User.create({ email, password: hashedPassword, ...rest });
+    res.status(201).json({ message: 'Usuario registrado con éxito', user });
   } catch (error) {
-    res.status(500).json({ message: 'Error al registrar usuario.', error });
+    res.status(500).json({ error: 'Error al registrar usuario' });
   }
 };
 
-// Iniciar sesión
-const login = async (req, res) => {
+// Inicio de sesión
+exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
-
-    if (!email || !password) {
-      return res.status(400).json({ message: 'Correo y contraseña son obligatorios.' });
+    const user = await User.findOne({ email });
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      return res.status(401).json({ error: 'Credenciales incorrectas' });
     }
-
-    const user = await User.findOne({
-      where: { email },
-      include: [{ model: Role, as: 'Role', attributes: ['name', 'description'] }],
-    });
-
-    if (!user) {
-      return res.status(404).json({ message: 'Usuario no encontrado.' });
-    }
-
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
-      return res.status(401).json({ message: 'Contraseña incorrecta.' });
-    }
-
-    const token = jwt.sign(
-      { id_user: user.id_user, email: user.email, role: user.Role.name },
-      process.env.JWT_SECRET,
-      { expiresIn: '1d' }
-    );
-
-    res.status(200).json({
-      message: 'Inicio de sesión exitoso.',
-      token,
-      user: {
-        id: user.id_user,
-        name: user.name,
-        email: user.email,
-        role: user.Role.name,
-        description: user.Role.description,
-      },
-    });
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
+    res.status(200).json({ message: 'Inicio de sesión exitoso', token });
   } catch (error) {
-    res.status(500).json({ message: 'Error al iniciar sesión.', error });
+    res.status(500).json({ error: 'Error al iniciar sesión' });
   }
 };
 
-module.exports = {
-  register,
-  login,
+// Recuperación de contraseña
+exports.forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
+
+    const resetToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    // Enviar correo aquí (integración pendiente)
+    res.status(200).json({ message: 'Instrucciones enviadas a tu correo', resetToken });
+  } catch (error) {
+    res.status(500).json({ error: 'Error al recuperar contraseña' });
+  }
 };
+
+

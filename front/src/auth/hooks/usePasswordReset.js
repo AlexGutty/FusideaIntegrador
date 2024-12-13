@@ -18,23 +18,25 @@ const usePasswordReset = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSuccessMessage('');
     setErrorMessage('');
+    setIsLoading(true);
 
     if (newPassword !== confirmPassword) {
       setErrorMessage('Las contraseñas no coinciden');
+      setIsLoading(false);
       return;
     }
 
     try {
-      // Assume we get the reset token from the URL
       const urlParams = new URLSearchParams(window.location.search);
       const token = urlParams.get('token');
 
-      const response = await fetch('/api/password-reset', {
+      const response = await fetch('http://localhost:3000/api/auth/password-reset', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -42,14 +44,17 @@ const usePasswordReset = () => {
         body: JSON.stringify({ newPassword, token }),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        throw new Error('Password reset failed');
+        throw new Error(data.message || 'Password reset failed');
       }
 
       setSuccessMessage('Tu contraseña ha sido restablecida exitosamente.');
     } catch (err) {
-      setErrorMessage('No se pudo restablecer la contraseña. Por favor, inténtalo de nuevo.');
-      console.error('Password reset error:', err);
+      setErrorMessage(err.message || 'No se pudo restablecer la contraseña. Por favor, inténtalo de nuevo.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -60,9 +65,9 @@ const usePasswordReset = () => {
     setConfirmPassword,
     successMessage,
     errorMessage,
+    isLoading,
     handleSubmit,
   };
 };
 
-export default usePasswordReset;
-
+export default usePasswordReset ;

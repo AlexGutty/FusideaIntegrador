@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom'; // Importamos useNavigate
 import useLoginForm from '../hooks/useLoginForm';
 
 /**
@@ -11,7 +12,26 @@ import useLoginForm from '../hooks/useLoginForm';
  */
 
 const LoginForm = () => {
-  const { formData, handleChange, handleSubmit, error, loading } = useLoginForm();
+  const { login, error, isLoading } = useLoginForm();
+  const navigate = useNavigate(); // Inicializamos useNavigate para redirigir al usuario
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const email = e.target.email.value.trim();
+    const password = e.target.password.value.trim();
+
+    console.log('Datos enviados:', { email, password }); // Verifica los datos antes de enviarlos
+
+    login({ email, password })
+      .then(() => {
+        // Si el login es exitoso, redirigimos al usuario a /home
+        navigate('/home');
+      })
+      .catch((err) => {
+        // Maneja cualquier error aquí si es necesario
+        console.error("Error al iniciar sesión:", err);
+      });
+  };
 
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
@@ -40,9 +60,6 @@ const LoginForm = () => {
                 id="email"
                 name="email"
                 type="email"
-                value={formData.email}
-                onChange={handleChange}
-                autoComplete="email"
                 required
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
@@ -71,9 +88,6 @@ const LoginForm = () => {
                 id="password"
                 name="password"
                 type="password"
-                value={formData.password}
-                onChange={handleChange}
-                autoComplete="current-password"
                 required
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
@@ -89,17 +103,15 @@ const LoginForm = () => {
           <div>
             <button
               type="submit"
-              disabled={loading}
-              className={`flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm ${
-                loading
-                  ? 'bg-gray-400 cursor-not-allowed'
-                  : 'bg-indigo-600 hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
-              }`}
+              disabled={isLoading}
+              className={`flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm ${isLoading ? 'bg-gray-500' : 'bg-indigo-600 hover:bg-indigo-500'} focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
             >
-              {loading ? 'Cargando...' : 'Iniciar sesión'}
+              {isLoading ? 'Cargando...' : 'Iniciar sesión'}
             </button>
           </div>
         </form>
+
+        {error && <p className="mt-2 text-center text-sm text-red-500">{error}</p>}
 
         <p className="mt-10 text-center text-sm text-gray-500">
           ¿No eres miembro?{' '}
@@ -116,5 +128,3 @@ const LoginForm = () => {
 };
 
 export default LoginForm;
-
-
