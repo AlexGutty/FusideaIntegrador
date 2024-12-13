@@ -16,7 +16,7 @@ const TemplateCard = ({ title, description, image, canvaLink, figmaLink }) => {
             className="flex items-center text-blue-500 hover:text-blue-700"
           >
             <FaPaintBrush className="mr-2" />
-            Edit in Canva
+            Editar en Canva
           </a>
           <a
             href={figmaLink}
@@ -25,7 +25,7 @@ const TemplateCard = ({ title, description, image, canvaLink, figmaLink }) => {
             className="flex items-center text-purple-500 hover:text-purple-700"
           >
             <FaFigma className="mr-2" />
-            Edit in Figma
+            Editar en Figma
           </a>
         </div>
       </div>

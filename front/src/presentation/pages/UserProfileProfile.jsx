@@ -4,7 +4,7 @@ import { BannerProfile } from '../components/BannerProfile';
 import { ProfileFormProfile } from '../components/ProfileFormProfile';
 import { CertificationsForm } from '../components/CertificationsForm';
 import { CollaborativeProjectsForm } from '../components/CollaborativeProjectsForm';
-import { useUser } from '../hooks/useUser';
+import useUser  from '../hooks/useUser';
 
 const UserProfileProfile = () => {
   const [isEditing, setIsEditing] = useState(false);

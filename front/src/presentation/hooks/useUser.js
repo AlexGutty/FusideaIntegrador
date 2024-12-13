@@ -77,3 +77,5 @@ export const useUser = () => {
     addCollaborativeProject,
   };
 };
+
+export default useUser;
