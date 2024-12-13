@@ -13,7 +13,6 @@ import { HomeIcon, UserGroupIcon, CurrencyDollarIcon, DocumentDuplicateIcon, Aca
  * 
  * @returns {JSX.Element} - Renderiza la cabecera con los enlaces de navegación y botones de autenticación o usuario.
  */
-
 const Header = () => {
   const { isMenuOpen, toggleMenu } = useMenu();
   const { isAuthenticated, user, logout } = useAuthState();
@@ -21,6 +20,10 @@ const Header = () => {
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const profileMenuRef = useRef(null);
   const location = useLocation();
+
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
@@ -42,6 +45,36 @@ const Header = () => {
     setIsProfileMenuOpen(false);
   }, [location]);
 
+  useEffect(() => {
+    const controlNavbar = () => {
+      if (typeof window !== 'undefined') {
+        const currentScrollY = window.scrollY;
+
+        if (currentScrollY > lastScrollY) {
+          setIsVisible(false);
+        } else {
+          setIsVisible(true);
+        }
+
+        if (currentScrollY > 0) {
+          setIsScrolled(true);
+        } else {
+          setIsScrolled(false);
+        }
+
+        setLastScrollY(currentScrollY);
+      }
+    };
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('scroll', controlNavbar);
+
+      return () => {
+        window.removeEventListener('scroll', controlNavbar);
+      };
+    }
+  }, [lastScrollY]);
+
   const isActivePath = (path) => {
     return location.pathname === path;
   };
@@ -56,7 +89,11 @@ const Header = () => {
   const authButtonClasses = "flex items-center px-6 py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105";
 
   return (
-    <header className="sticky top-0 bg-white shadow-md z-50">
+    <header className={`sticky top-0 z-50 transition-all duration-300 ${
+      isVisible ? 'translate-y-0' : '-translate-y-full'
+    } ${
+      isScrolled ? 'bg-white shadow-md' : 'bg-transparent'
+    }`}>
       <div className="flex flex-col md:flex-row items-center justify-between p-4 mx-auto max-w-7xl">
         {/* Logo */}
         <Link to="/" className="transform transition-transform duration-200 hover:scale-105">
@@ -192,3 +229,5 @@ const Header = () => {
 };
 
 export default Header;
+
+
