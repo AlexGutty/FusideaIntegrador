@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import CourseCard from '../components/CourseCard';
-import CourseModal from '../components/CourseModal';
 import { MagnifyingGlassIcon, AdjustmentsHorizontalIcon } from '@heroicons/react/24/outline';
 
 const categories = ['Tecnología', 'Diseño', 'Negocios', 'Ciencias', 'Humanidades'];
@@ -13,24 +12,41 @@ const CoursesPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedLevel, setSelectedLevel] = useState('');
-  const [selectedCourse, setSelectedCourse] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [expandedCourseId, setExpandedCourseId] = useState(null);
 
   useEffect(() => {
-    // Fetch courses from backend
-    // This is a placeholder. Replace with actual API call
     const fetchCourses = async () => {
-      // const response = await fetch('/api/courses');
-      // const data = await response.json();
-      // setCourses(data);
-      // setFilteredCourses(data);
-      
-      // Placeholder data
       const placeholderCourses = [
-        { id: 1, title: 'Introducción a la Programación', category: 'Tecnología', level: 'Pregrado', description: 'Aprende los fundamentos de la programación' },
-        { id: 2, title: 'Diseño UX/UI', category: 'Diseño', level: 'Certificación', description: 'Domina las técnicas de diseño de experiencia de usuario' },
-        { id: 3, title: 'Gestión de Proyectos', category: 'Negocios', level: 'Maestría', description: 'Aprende a liderar proyectos eficientemente' },
-        // Add more placeholder courses as needed
+        { 
+          id: 1, 
+          title: 'Introducción a la Programación', 
+          category: 'Tecnología', 
+          level: 'Pregrado', 
+          description: 'Aprende los fundamentos de la programación', 
+          fullDescription: 'Este curso te introducirá a los conceptos básicos de la programación con Scratch, incluyendo variables, estructuras de control, funciones y más. Perfecto para principiantes.',
+          image: 'https://img.freepik.com/foto-gratis/vista-superior-pirata-informatico-irreconocible-que-realiza-ciberataque-noche_1098-18706.jpg?t=st=1734102382~exp=1734105982~hmac=4da5c5b64e02bd562ff113592bdce86e7a84c970466467a6a85d9b7347a3f3f3&w=740',
+          pdfLink: 'https://drive.google.com/file/d/0ByeS4oOUV-49NzFiUDJSeFBvTHc/view?resourcekey=0-a-Y0RLItyjYnhMtmvdknqw'
+        },
+        { 
+          id: 2, 
+          title: 'Diseño UX/UI', 
+          category: 'Diseño', 
+          level: 'Certificación', 
+          description: 'Domina las técnicas de diseño de experiencia de usuario', 
+          fullDescription: 'Aprende a crear interfaces intuitivas y atractivas. Este curso cubre principios de diseño, prototipado, y evaluación de usabilidad.',
+          image: 'https://img.freepik.com/foto-gratis/manos-alto-angulo-sosteniendo-papel_23-2149930977.jpg?t=st=1734102418~exp=1734106018~hmac=dde408e4ea33bc74b2677f4a21583c244f6c6a5520632d156602554797614c0f&w=1380',
+          pdfLink: 'https://perio.unlp.edu.ar/catedras/ecal/wp-content/uploads/sites/125/2023/02/Diseno-UX-UI.pdf'
+        },
+        { 
+          id: 3, 
+          title: 'Gestión de Proyectos', 
+          category: 'Negocios', 
+          level: 'Maestría', 
+          description: 'Aprende a liderar proyectos eficientemente', 
+          fullDescription: 'Desarrolla habilidades para planificar, ejecutar y cerrar proyectos exitosamente. Incluye metodologías ágiles y tradicionales.',
+          image: 'https://img.freepik.com/foto-gratis/gente-negocios-dandose-mano_53876-13391.jpg?t=st=1734102394~exp=1734105994~hmac=4d9dffb237a9dc624bc41731ca89cd5f7aae93b26a20b69fb02e5382e641442c&w=1380',
+          pdfLink: 'https://repositorio.cepal.org/server/api/core/bitstreams/71d847bf-2137-4a1b-8776-017aa056a0ca/content'
+        }
       ];
       setCourses(placeholderCourses);
       setFilteredCourses(placeholderCourses);
@@ -60,9 +76,8 @@ const CoursesPage = () => {
     setSelectedLevel(e.target.value);
   };
 
-  const handleCourseClick = (course) => {
-    setSelectedCourse(course);
-    setIsModalOpen(true);
+  const handleCourseClick = (courseId) => {
+    setExpandedCourseId(expandedCourseId === courseId ? null : courseId);
   };
 
   return (
@@ -119,17 +134,17 @@ const CoursesPage = () => {
         transition={{ duration: 0.5, delay: 0.2 }}
       >
         {filteredCourses.map(course => (
-          <CourseCard key={course.id} course={course} onClick={() => handleCourseClick(course)} />
+          <CourseCard 
+            key={course.id} 
+            course={course} 
+            isExpanded={course.id === expandedCourseId}
+            onClick={handleCourseClick} 
+          />
         ))}
       </motion.div>
-
-      <CourseModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        course={selectedCourse}
-      />
     </motion.div>
   );
 };
 
 export default CoursesPage;
+

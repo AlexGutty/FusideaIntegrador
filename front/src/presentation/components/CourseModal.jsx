@@ -1,6 +1,5 @@
-import React from 'react';
-import { Dialog, Transition } from '@headlessui/react';
-import { Fragment } from 'react';
+import React, { Fragment } from 'react';
+import { Dialog as HeadlessDialog, Transition } from '@headlessui/react';
 import { ArrowDownTrayIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
 const CourseModal = ({ isOpen, onClose, course }) => {
@@ -8,7 +7,7 @@ const CourseModal = ({ isOpen, onClose, course }) => {
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
-      <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={onClose}>
+      <HeadlessDialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={onClose}>
         <div className="min-h-screen px-4 text-center">
           <Transition.Child
             as={Fragment}
@@ -19,7 +18,7 @@ const CourseModal = ({ isOpen, onClose, course }) => {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
+            <HeadlessDialog.Overlay className="fixed inset-0 bg-black opacity-30" />
           </Transition.Child>
 
           <span className="inline-block h-screen align-middle" aria-hidden="true">
@@ -36,10 +35,11 @@ const CourseModal = ({ isOpen, onClose, course }) => {
             leaveTo="opacity-0 scale-95"
           >
             <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
-              <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-[#4c9141]">
+              <HeadlessDialog.Title as="h3" className="text-lg font-medium leading-6 text-[#4c9141]">
                 {course.title}
-              </Dialog.Title>
+              </HeadlessDialog.Title>
               <div className="mt-2">
+                <img src={course.image} alt={course.title} className="w-full h-48 object-cover rounded-md mb-4" />
                 <p className="text-sm text-gray-500">{course.description}</p>
               </div>
 
@@ -66,9 +66,10 @@ const CourseModal = ({ isOpen, onClose, course }) => {
             </div>
           </Transition.Child>
         </div>
-      </Dialog>
+      </HeadlessDialog>
     </Transition>
   );
 };
 
 export default CourseModal;
+

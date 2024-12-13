@@ -137,12 +137,13 @@ const Header = () => {
             isMenuOpen ? 'flex' : 'hidden md:flex'
           }`}
         >
-          <Link to="/" className={navLinkClasses('/')}>
+
+          {isAuthenticated ? (
+            <>
+                      <Link to="/home-page" className={navLinkClasses('/')}>
             <HomeIcon className="w-5 h-5 mr-2" />
             Home
           </Link>
-          {isAuthenticated ? (
-            <>
               <Link to="/friendship-manager" className={navLinkClasses('/connect')}>
                 <UserGroupIcon className="w-5 h-5 mr-2" />
                 Conecta
@@ -162,6 +163,10 @@ const Header = () => {
             </>
           ) : (
             <>
+                      <Link to="/" className={navLinkClasses('/')}>
+            <HomeIcon className="w-5 h-5 mr-2" />
+            Home
+          </Link>
               <Link to="/trades" className={navLinkClasses('/trades')}>
                 <CurrencyDollarIcon className="w-5 h-5 mr-2" />
                 Trades

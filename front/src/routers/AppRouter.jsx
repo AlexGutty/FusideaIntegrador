@@ -36,6 +36,7 @@ const AppRouter = () => {
 
           {/* Protected Routes */}
           <Route element={<PrivateRoute />}>
+          <Route path="home-page" element={<HomePage />} />
             <Route path="perfil" element={<UserProfilePage />} />
             <Route path="templates" element={<Templates />} />
             <Route path="user-directory" element={<UserDirectory />} />
