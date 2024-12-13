@@ -29,6 +29,7 @@ const AppRouter = () => {
           <Route path="register" element={<Register />} />
           <Route path="trades" element={<TradesPage />} />
           <Route path="success-stories" element={<SuccessStoriesPage />} />
+            <Route path="my-profile" element={<UserProfileProfile />} />
 
           {/* Protected Routes */}
           <Route element={<PrivateRoute />}>
@@ -38,7 +39,6 @@ const AppRouter = () => {
             <Route path="templates" element={<Templates />} />
             <Route path="user-directory" element={<UserDirectory />} />
             <Route path="friendship-manager" element={<FriendshipManager />} />
-            <Route path="my-profile" element={<UserProfileProfile />} />
             <Route path="my-trades" element={<Trades />} />
             <Route path="courses" element={<CoursesPage />} />
           </Route>
