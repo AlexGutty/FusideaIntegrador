@@ -1,40 +1,66 @@
-import React from 'react';
+// src/auth/components/RegisterForm.jsx
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useRegister from '../hooks/useRegister';
+import useAuth from '../../hooks/useAuth';
+import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Importamos iconos para el toggle de contraseña
 
 const RegisterForm = () => {
-  const { register, error, isLoading } = useRegister();
-  const navigate = useNavigate(); // Inicializamos useNavigate para la redirección
+  const { register, error, loading } = useAuth();
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const [localError, setLocalError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const { name, last_name, email, password, confirmPassword, gender, phoneNumber, avatar, banner } = e.target.elements;
+    const { name, last_name, email, password, confirmPassword, gender, phoneNumber, countryCode, avatar, banner } = e.target.elements;
 
-    // Verifica que las contraseñas coincidan
+    // Validar que las contraseñas coincidan
     if (password.value !== confirmPassword.value) {
-      alert('Las contraseñas no coinciden');
+      setLocalError('Las contraseñas no coinciden');
       return;
     }
 
-    register({
-      name: name.value,
-      last_name: last_name.value,
-      email: email.value,
-      password: password.value,
-      gender: gender.value,
-      phoneNumber: phoneNumber.value,
-      avatar: avatar.files[0],  // Aquí se toma el archivo seleccionado
-      banner: banner.files[0],  // Aquí se toma el archivo seleccionado
-    })
-      .then(() => {
-        // Si el registro es exitoso, redirigimos al login
-        navigate('/login');
-      })
-      .catch((err) => {
-        // Maneja cualquier error aquí
-        console.error("Error al registrar:", err);
+    try {
+      setLocalError('');
+      console.log('Datos enviados:', {
+        name: name.value,
+        last_name: last_name.value,
+        email: email.value,
+        password: password.value,
+        gender: gender.value,
+        phoneNumber: `${countryCode.value}${phoneNumber.value}`,
+        avatar: avatar.files[0],
+        banner: banner.files[0],
       });
+
+      await register({
+        name: name.value,
+        last_name: last_name.value,
+        email: email.value,
+        password: password.value,
+        gender: gender.value,
+        phoneNumber: `${countryCode.value}${phoneNumber.value}`,
+        avatar: avatar.files[0],
+        banner: banner.files[0],
+      });
+
+      // Redirigir al login después del registro exitoso
+      navigate('/login');
+    } catch (err) {
+      console.error('Error al registrar:', err);
+      // El error ya está manejado en AuthContext
+    }
   };
+
+  const countryCodes = [
+    { code: '+1', country: 'USA' },
+    { code: '+52', country: 'México' },
+    { code: '+34', country: 'España' },
+    { code: '+54', country: 'Argentina' },
+    // Añade más códigos de países según sea necesario
+  ];
 
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
@@ -46,6 +72,7 @@ const RegisterForm = () => {
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
         <form className="space-y-6" onSubmit={handleSubmit}>
+          {/* Nombre */}
           <div>
             <label
               htmlFor="name"
@@ -60,10 +87,12 @@ const RegisterForm = () => {
                 type="text"
                 required
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                placeholder="Ingresa tu nombre"
               />
             </div>
           </div>
 
+          {/* Apellido */}
           <div>
             <label
               htmlFor="last_name"
@@ -78,10 +107,12 @@ const RegisterForm = () => {
                 type="text"
                 required
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                placeholder="Ingresa tu apellido"
               />
             </div>
           </div>
 
+          {/* Correo Electrónico */}
           <div>
             <label
               htmlFor="email"
@@ -96,46 +127,64 @@ const RegisterForm = () => {
                 type="email"
                 required
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                placeholder="correo@ejemplo.com"
               />
             </div>
           </div>
 
-          <div>
+          {/* Contraseña */}
+          <div className="relative">
             <label
               htmlFor="password"
               className="block text-sm font-medium leading-6 text-gray-900"
             >
               Contraseña
             </label>
-            <div className="mt-2">
+            <div className="mt-2 relative">
               <input
                 id="password"
                 name="password"
-                type="password"
+                type={showPassword ? 'text' : 'password'} // Cambio dinámico del tipo de input
                 required
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="block w-full rounded-md border-0 py-1.5 pr-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                placeholder="Ingresa tu contraseña"
               />
+              <span
+                className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <FaEyeSlash className="h-5 w-5 text-gray-500" /> : <FaEye className="h-5 w-5 text-gray-500" />}
+              </span>
             </div>
           </div>
 
-          <div>
+          {/* Confirmar Contraseña */}
+          <div className="relative">
             <label
               htmlFor="confirmPassword"
               className="block text-sm font-medium leading-6 text-gray-900"
             >
               Confirmar Contraseña
             </label>
-            <div className="mt-2">
+            <div className="mt-2 relative">
               <input
                 id="confirmPassword"
                 name="confirmPassword"
-                type="password"
+                type={showConfirmPassword ? 'text' : 'password'} // Cambio dinámico del tipo de input
                 required
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="block w-full rounded-md border-0 py-1.5 pr-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                placeholder="Repite tu contraseña"
               />
+              <span
+                className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              >
+                {showConfirmPassword ? <FaEyeSlash className="h-5 w-5 text-gray-500" /> : <FaEye className="h-5 w-5 text-gray-500" />}
+              </span>
             </div>
           </div>
 
+          {/* Género */}
           <div>
             <label
               htmlFor="gender"
@@ -148,7 +197,7 @@ const RegisterForm = () => {
                 id="gender"
                 name="gender"
                 required
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               >
                 <option value="">Seleccionar...</option>
                 <option value="MASCULINO">Masculino</option>
@@ -158,6 +207,7 @@ const RegisterForm = () => {
             </div>
           </div>
 
+          {/* Teléfono con Selección de Prefijo de País */}
           <div>
             <label
               htmlFor="phoneNumber"
@@ -165,17 +215,34 @@ const RegisterForm = () => {
             >
               Teléfono
             </label>
-            <div className="mt-2">
+            <div className="mt-2 flex">
+              {/* Selección de Prefijo de País */}
+              <select
+                id="countryCode"
+                name="countryCode"
+                className="w-1/4 rounded-l-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                required
+              >
+                <option value="">Código</option>
+                {countryCodes.map((country, index) => (
+                  <option key={index} value={country.code}>
+                    {country.code} ({country.country})
+                  </option>
+                ))}
+              </select>
+              {/* Entrada de Número de Teléfono */}
               <input
                 id="phoneNumber"
                 name="phoneNumber"
                 type="tel"
                 required
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="w-3/4 rounded-r-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                placeholder="Ingresa tu número de teléfono"
               />
             </div>
           </div>
 
+          {/* Avatar (Imagen) */}
           <div>
             <label
               htmlFor="avatar"
@@ -194,6 +261,7 @@ const RegisterForm = () => {
             </div>
           </div>
 
+          {/* Banner (Imagen) */}
           <div>
             <label
               htmlFor="banner"
@@ -212,19 +280,25 @@ const RegisterForm = () => {
             </div>
           </div>
 
+          {/* Botón de Registro */}
           <div>
             <button
               type="submit"
-              disabled={isLoading}
-              className={`flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm ${isLoading ? 'bg-gray-500' : 'bg-indigo-600 hover:bg-indigo-500'} focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
+              disabled={loading}
+              className={`flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm ${
+                loading ? 'bg-gray-500 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-500'
+              } focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
             >
-              {isLoading ? 'Cargando...' : 'Registrarse'}
+              {loading ? 'Cargando...' : 'Registrarse'}
             </button>
           </div>
         </form>
 
+        {/* Mensajes de Error */}
+        {localError && <p className="mt-2 text-center text-sm text-red-500">{localError}</p>}
         {error && <p className="mt-2 text-center text-sm text-red-500">{error}</p>}
 
+        {/* Enlace a la Página de Login */}
         <p className="mt-10 text-center text-sm text-gray-500">
           ¿Ya tienes cuenta?{' '}
           <a

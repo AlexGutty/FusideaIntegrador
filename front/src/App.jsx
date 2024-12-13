@@ -1,3 +1,4 @@
+// src/App.jsx
 import React from 'react';
 import AppRouter from './routers/AppRouter';
 import { AuthProvider } from './contexts/AuthContext';
@@ -10,13 +11,13 @@ const queryClient = new QueryClient();
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-      <NotificationProvider>
-        <ProjectProvider>
-          <AppRouter />
-        </ProjectProvider>
-      </NotificationProvider>
-    </AuthProvider>
+      <AuthProvider>
+        <NotificationProvider>
+          <ProjectProvider>
+            <AppRouter />
+          </ProjectProvider>
+        </NotificationProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

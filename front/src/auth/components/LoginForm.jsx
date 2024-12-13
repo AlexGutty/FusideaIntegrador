@@ -1,9 +1,10 @@
+// src/auth/components/LoginForm.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Importamos useNavigate
-import useLoginForm from '../hooks/useLoginForm';
+import useAuth from '../../hooks/useAuth'; // Asegúrate de que la ruta sea correcta
 
 const LoginForm = () => {
-  const { login, error, isLoading } = useLoginForm();
+  const { login, error, loading } = useAuth(); // Usamos el hook actualizado
   const navigate = useNavigate(); // Inicializamos useNavigate para redirigir al usuario
   const [localError, setLocalError] = useState(''); // Para manejar errores locales
 
@@ -27,6 +28,7 @@ const LoginForm = () => {
       navigate('/home');
     } catch (err) {
       console.error('Error al iniciar sesión:', err);
+      // Puedes manejar errores adicionales aquí si es necesario
     }
   };
 
@@ -94,14 +96,14 @@ const LoginForm = () => {
           <div>
             <button
               type="submit"
-              disabled={isLoading}
+              disabled={loading}
               className={`flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm ${
-                isLoading
+                loading
                   ? 'bg-gray-500 cursor-not-allowed'
                   : 'bg-indigo-600 hover:bg-indigo-500'
               } focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}
             >
-              {isLoading ? 'Cargando...' : 'Iniciar sesión'}
+              {loading ? 'Cargando...' : 'Iniciar sesión'}
             </button>
           </div>
         </form>
